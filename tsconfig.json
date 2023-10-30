@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "target": "es6",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "outDir": "dist",
+    "resolveJsonModule": true,
+    "strictPropertyInitialization": false
+  },
+  "include": ["./scripts", "./test",  "./tasks", "./utils", "./deploy_outside"],
+
+  "exclude": ["node_modules"]
+}
