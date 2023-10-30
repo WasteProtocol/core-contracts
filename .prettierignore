@@ -7,7 +7,7 @@ dist/
 lib/
 node_modules/
 typechain/
-deployments/
+
 flatten/
 
 contracts/offchain-aggregator/
@@ -16,4 +16,3 @@ contracts/offchain-aggregator/
 coverage.json
 *.csv
 ADDRESS.md
-scripts/mm-users/mmvUser.json

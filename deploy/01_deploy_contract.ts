@@ -1,12 +1,12 @@
-const {BigNumber} = require('ethers');
-const {BN, balance, ether, expectRevert, time} = require('@openzeppelin/test-helpers');
+const { BigNumber } = require('ethers');
+const { BN, balance, ether, expectRevert, time } = require('@openzeppelin/test-helpers');
 const contractName = '';
 
 // @ts-ignore
-module.exports = async function ({ethers, network, getNamedAccounts, deployments}) {
-  const {provider} = ethers;
-  const {deploy} = deployments;
-  const {deployer} = await getNamedAccounts();
+module.exports = async function ({ ethers, network, getNamedAccounts, deployments }) {
+  const { provider } = ethers;
+  const { deploy } = deployments;
+  const { deployer } = await getNamedAccounts();
 
   const balance = await provider.getBalance(deployer);
   console.log(`Remaining balance is: ${balance}`);
@@ -19,7 +19,7 @@ module.exports = async function ({ethers, network, getNamedAccounts, deployments
     deterministicDeployment: false,
   });
   console.log(`Contract ${contractName} was deployed at address ${contract.address} at chain id : ${chainId}`);
-  console.log("==================")
+  console.log('==================');
 };
 
 module.exports.tags = [contractName];
