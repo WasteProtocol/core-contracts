@@ -2,4 +2,4 @@
 **/coverage/
 **/build/
 
-hardhat.config.js
+hardhat.config.ts

@@ -1,3 +1,5 @@
+import { Storage } from '../../types/ethers-contracts/Storage';
+
 const { expect } = require('chai');
 const { ethers } = require('hardhat');
 const { BigNumber } = require('ethers');
@@ -9,13 +11,13 @@ describe('Storage', function () {
   let bob;
   let addrs;
 
-  let Storage;
-  let storage;
+  let factory: Storage;
+  let storage: Storage;
 
   before(async function () {
     [owner, minter, alice, bob, ...addrs] = await ethers.getSigners();
-    Storage = await ethers.getContractFactory('Storage');
-    storage = await Storage.deploy('test');
+    factory = (await ethers.getContractFactory('Storage')) as unknown as Storage;
+    storage = await factory.deploy('test');
   });
 
   describe('Deployed', function () {

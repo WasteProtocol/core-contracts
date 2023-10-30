@@ -43,6 +43,7 @@
     "@nomiclabs/hardhat-web3": "^2.0.0",
     "@openzeppelin/test-helpers": "^0.5.15",
     "@primitivefi/hardhat-dodoc": "^0.2.3",
+    "@types/mocha": "^10.0.3",
     "@typescript-eslint/eslint-plugin": "^5.20.0",
     "@typescript-eslint/parser": "^5.20.0",
     "chai": "^4.2.0",
@@ -63,6 +64,7 @@
     "solhint": "3.3.7",
     "solhint-plugin-prettier": "0.0.5",
     "solidity-coverage": "0.7.20",
+    "ts-node": "^10.9.1",
     "typechain": "^3.0.0",
     "web3": "^1.7.0"
   },

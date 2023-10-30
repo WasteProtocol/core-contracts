@@ -1,3 +1,7 @@
+import { HardhatUserConfig } from 'hardhat/config';
+import { config as dotEnvConfig } from 'dotenv';
+dotEnvConfig();
+
 require('@nomiclabs/hardhat-waffle');
 require('hardhat-gas-reporter');
 require('@nomiclabs/hardhat-web3');
@@ -14,7 +18,7 @@ const accounts = {
   mnemonic: process.env.MNEMONIC || 'test test test test test test test test test test test junk',
 };
 
-module.exports = {
+const config: any = {
   namedAccounts: {
     deployer: {
       default: 0,
@@ -45,6 +49,10 @@ module.exports = {
     freshOutput: true, // default
   },
   solidity: {
+    typechain: {
+      outDir: 'typechain',
+      target: 'ethers-v5',
+    },
     compilers: [
       {
         version: '0.8.14',
@@ -125,3 +133,5 @@ module.exports = {
     ],
   },
 };
+
+export default config;
