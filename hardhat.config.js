@@ -75,12 +75,52 @@ module.exports = {
       url: 'https://rpc-sepolia.rockx.com',
       chainId: 11155111,
     },
+    bkc: {
+      accounts,
+      url: 'https://rpc.bitkubchain.io',
+      chainId: 96,
+    },
+    bkc_testnet: {
+      accounts,
+      url: 'https://rpc-testnet.bitkubchain.io',
+      chainId: 25925,
+    },
+    taiko: {
+      url: 'https://rpc.test.taiko.xyz',
+      accounts: accounts,
+      chainId: 167005,
+    },
   },
   etherscan: {
     apiKey: {
       goerli: 'KBZ53MKPP551QTVDYSV8S961FEUC96F8QW',
       sepolia: 'KBZ53MKPP551QTVDYSV8S961FEUC96F8QW',
     },
-    customChains: []
+    customChains: [
+      {
+        network: 'bkc_testnet',
+        chainId: 25925,
+        urls: {
+          apiURL: 'https://testnet.bkcscan.com/api',
+          browserURL: 'https://testnet.bkcscan.com/',
+        },
+      },
+      {
+        network: 'bkc',
+        chainId: 96,
+        urls: {
+          apiURL: 'https://www.bkcscan.com/api',
+          browserURL: 'https:///www.bkcscan.com/',
+        },
+      },
+      {
+        network: 'taiko',
+        chainId: 167005,
+        urls: {
+          apiURL: 'https://explorer.test.taiko.xyz/api',
+          browserURL: 'https://explorer.test.taiko.xyz',
+        },
+      },
+    ],
   },
 };
