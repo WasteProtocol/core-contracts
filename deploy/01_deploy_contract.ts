@@ -1,6 +1,6 @@
 const { BigNumber } = require('ethers');
 const { BN, balance, ether, expectRevert, time } = require('@openzeppelin/test-helpers');
-const contractName = '';
+const contractName = 'Storage';
 
 // @ts-ignore
 module.exports = async function ({ ethers, network, getNamedAccounts, deployments }) {
@@ -14,7 +14,7 @@ module.exports = async function ({ ethers, network, getNamedAccounts, deployment
   const chainId = network.config.chainId;
   const contract = await deploy(contractName, {
     from: deployer,
-    args: [],
+    args: ['test'],
     log: true,
     deterministicDeployment: false,
   });
