@@ -8,6 +8,7 @@ require('@openzeppelin/hardhat-upgrades');
 require('@primitivefi/hardhat-dodoc');
 require('hardhat-deploy');
 require('hardhat-deploy-ethers');
+require('hardhat-abi-exporter');
 
 const accounts = {
   mnemonic: process.env.MNEMONIC || 'test test test test test test test test test test test junk',
