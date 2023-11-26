@@ -1,5 +1,6 @@
 # Smart contract boiler plate
 This project is a smart contract development boiler plate develop by a3r0nz.
+ version 1.1.0
 
 ## Documenting
 To generate documents run this command
