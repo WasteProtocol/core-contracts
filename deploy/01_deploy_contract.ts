@@ -2,6 +2,7 @@ const { BigNumber } = require('ethers');
 const { BN, balance, ether, expectRevert, time } = require('@openzeppelin/test-helpers');
 const contractName = 'Storage';
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 module.exports = async function ({ ethers, network, getNamedAccounts, deployments }) {
   const { provider } = ethers;

@@ -1,19 +1,20 @@
-import { HardhatUserConfig } from 'hardhat/config';
 import { config as dotEnvConfig } from 'dotenv';
+
+//import '@nomiclabs/hardhat-waffle';
+import './tasks/accounts';
+import 'hardhat-gas-reporter';
+import '@nomiclabs/hardhat-web3';
+import './tasks/faucet';
+import 'dotenv/config';
+import '@openzeppelin/hardhat-upgrades';
+import '@primitivefi/hardhat-dodoc';
+import '@typechain/hardhat';
+import 'hardhat-deploy';
+import 'hardhat-deploy-ethers';
+import 'hardhat-abi-exporter';
+import '@nomicfoundation/hardhat-chai-matchers';
+
 dotEnvConfig();
-
-require('@nomiclabs/hardhat-waffle');
-require('hardhat-gas-reporter');
-require('@nomiclabs/hardhat-web3');
-require('./tasks/faucet');
-require('./tasks/accounts');
-require('dotenv/config');
-require('@openzeppelin/hardhat-upgrades');
-require('@primitivefi/hardhat-dodoc');
-require('hardhat-deploy');
-require('hardhat-deploy-ethers');
-require('hardhat-abi-exporter');
-
 const accounts = {
   mnemonic: process.env.MNEMONIC || 'test test test test test test test test test test test junk',
 };
@@ -84,6 +85,12 @@ const config: any = {
       url: 'https://rpc-sepolia.rockx.com',
       chainId: 11155111,
     },
+    polygon_mumbai: {
+      accounts,
+      //url: 'https://rpc-mumbai.maticvigil.com/',
+      url: 'https://polygon-mumbai.blockpi.network/v1/rpc/public',
+      chainId: 80001,
+    },
     bkc: {
       accounts,
       url: 'https://rpc.bitkubchain.io',
@@ -104,6 +111,10 @@ const config: any = {
     apiKey: {
       goerli: 'KBZ53MKPP551QTVDYSV8S961FEUC96F8QW',
       sepolia: 'KBZ53MKPP551QTVDYSV8S961FEUC96F8QW',
+      polygon_mumbai: 'FPHU3AFWJD2M3ECIKN61FPG1CIMN3IWF46',
+      bkc_testnet: 'key',
+      bkc: 'key',
+      polygonMumbai: 'FPHU3AFWJD2M3ECIKN61FPG1CIMN3IWF46',
     },
     customChains: [
       {
