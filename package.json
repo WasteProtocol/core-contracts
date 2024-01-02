@@ -23,6 +23,7 @@
     "lint:ts:fix": "eslint --config .eslintrc --ignore-path .gitignore . --fix",
     "prettier": "prettier --config .prettierrc --write \"**/*.{js,json,md,sol,ts}\"",
     "prettier:check": "prettier --check --config .prettierrc \"**/*.{js,json,md,sol,ts}\"",
+    "prettier:contract": "prettier --write --plugin=prettier-plugin-solidity 'contracts/**/*.sol'",
     "test": "hardhat test",
     "verify": "hardhat verify",
     "verify:bkc": "hardhat run scripts/verify.js --network bkc",
