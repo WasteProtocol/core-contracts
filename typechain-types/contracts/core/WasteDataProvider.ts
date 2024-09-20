@@ -62,11 +62,13 @@ export interface WasteDataProviderInterface extends utils.Interface {
   functions: {
     "addOrUpdateCategory(uint256,string,uint256)": FunctionFragment;
     "addWasteTypeToCategory(uint256,uint256,string)": FunctionFragment;
+    "getCarbonEmissionRate(uint256)": FunctionFragment;
     "getCategoryByWasteType(uint256)": FunctionFragment;
     "getWasteTypes(uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "removeCategory(uint256)": FunctionFragment;
     "removeWasteType(uint256)": FunctionFragment;
+    "setCarbonEmissionRate(uint256,uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "updateWasteType(uint256,string)": FunctionFragment;
     "wasteCategories(uint256)": FunctionFragment;
@@ -77,11 +79,13 @@ export interface WasteDataProviderInterface extends utils.Interface {
     nameOrSignatureOrTopic:
       | "addOrUpdateCategory"
       | "addWasteTypeToCategory"
+      | "getCarbonEmissionRate"
       | "getCategoryByWasteType"
       | "getWasteTypes"
       | "owner"
       | "removeCategory"
       | "removeWasteType"
+      | "setCarbonEmissionRate"
       | "transferOwnership"
       | "updateWasteType"
       | "wasteCategories"
@@ -105,6 +109,10 @@ export interface WasteDataProviderInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
+    functionFragment: "getCarbonEmissionRate",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "getCategoryByWasteType",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
@@ -120,6 +128,10 @@ export interface WasteDataProviderInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "removeWasteType",
     values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setCarbonEmissionRate",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
@@ -147,6 +159,10 @@ export interface WasteDataProviderInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "getCarbonEmissionRate",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getCategoryByWasteType",
     data: BytesLike
   ): Result;
@@ -161,6 +177,10 @@ export interface WasteDataProviderInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "removeWasteType",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setCarbonEmissionRate",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -296,6 +316,11 @@ export interface WasteDataProvider extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    getCarbonEmissionRate(
+      wasteTypeId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     getCategoryByWasteType(
       wasteTypeId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -315,6 +340,12 @@ export interface WasteDataProvider extends BaseContract {
 
     removeWasteType(
       wasteTypeId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    setCarbonEmissionRate(
+      categoryId: PromiseOrValue<BigNumberish>,
+      rate: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -360,6 +391,11 @@ export interface WasteDataProvider extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  getCarbonEmissionRate(
+    wasteTypeId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   getCategoryByWasteType(
     wasteTypeId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
@@ -379,6 +415,12 @@ export interface WasteDataProvider extends BaseContract {
 
   removeWasteType(
     wasteTypeId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  setCarbonEmissionRate(
+    categoryId: PromiseOrValue<BigNumberish>,
+    rate: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -424,6 +466,11 @@ export interface WasteDataProvider extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    getCarbonEmissionRate(
+      wasteTypeId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getCategoryByWasteType(
       wasteTypeId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -443,6 +490,12 @@ export interface WasteDataProvider extends BaseContract {
 
     removeWasteType(
       wasteTypeId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setCarbonEmissionRate(
+      categoryId: PromiseOrValue<BigNumberish>,
+      rate: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -540,6 +593,11 @@ export interface WasteDataProvider extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    getCarbonEmissionRate(
+      wasteTypeId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getCategoryByWasteType(
       wasteTypeId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -559,6 +617,12 @@ export interface WasteDataProvider extends BaseContract {
 
     removeWasteType(
       wasteTypeId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setCarbonEmissionRate(
+      categoryId: PromiseOrValue<BigNumberish>,
+      rate: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -599,6 +663,11 @@ export interface WasteDataProvider extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    getCarbonEmissionRate(
+      wasteTypeId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getCategoryByWasteType(
       wasteTypeId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -618,6 +687,12 @@ export interface WasteDataProvider extends BaseContract {
 
     removeWasteType(
       wasteTypeId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setCarbonEmissionRate(
+      categoryId: PromiseOrValue<BigNumberish>,
+      rate: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

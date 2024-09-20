@@ -157,4 +157,20 @@ contract WasteDataProvider {
         require(newOwner != address(0), "Invalid address");
         owner = newOwner;
     }
+
+    function getCarbonEmissionRate(uint256 wasteTypeId) public view returns (uint256) {
+        uint256 categoryId = wasteTypeToCategory[wasteTypeId];
+        WasteCategory storage category = wasteCategories[categoryId];
+        return category.emissionRate;
+    }
+
+    /**
+     * @dev Sets the carbon emission rate of a specific waste type (for testing purposes)
+     * @param categoryId The ID of the waste category
+     * @param rate The carbon emission rate in g of CO2 per g of waste, scaled by 1e18
+     */
+    function setCarbonEmissionRate(uint256 categoryId, uint256 rate) external onlyOwner {
+        WasteCategory storage category = wasteCategories[categoryId];
+        category.emissionRate  =rate;
+    }
 }

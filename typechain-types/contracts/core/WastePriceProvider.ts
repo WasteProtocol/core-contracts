@@ -40,6 +40,7 @@ export interface WastePriceProviderInterface extends utils.Interface {
     "s_lastRequestId()": FunctionFragment;
     "s_lastResponse()": FunctionFragment;
     "setRelayer(address)": FunctionFragment;
+    "setWastePrice(uint256,uint256)": FunctionFragment;
     "testFulfillRequest(bytes32,bytes,bytes)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "wastePrices(uint256)": FunctionFragment;
@@ -58,6 +59,7 @@ export interface WastePriceProviderInterface extends utils.Interface {
       | "s_lastRequestId"
       | "s_lastResponse"
       | "setRelayer"
+      | "setWastePrice"
       | "testFulfillRequest"
       | "transferOwnership"
       | "wastePrices"
@@ -104,6 +106,10 @@ export interface WastePriceProviderInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "setRelayer",
     values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setWastePrice",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "testFulfillRequest",
@@ -157,6 +163,10 @@ export interface WastePriceProviderInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "setRelayer", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setWastePrice",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "testFulfillRequest",
     data: BytesLike
@@ -321,6 +331,12 @@ export interface WastePriceProvider extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    setWastePrice(
+      wasteTypeId: PromiseOrValue<BigNumberish>,
+      price: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     testFulfillRequest(
       requestId: PromiseOrValue<BytesLike>,
       response: PromiseOrValue<BytesLike>,
@@ -380,6 +396,12 @@ export interface WastePriceProvider extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  setWastePrice(
+    wasteTypeId: PromiseOrValue<BigNumberish>,
+    price: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   testFulfillRequest(
     requestId: PromiseOrValue<BytesLike>,
     response: PromiseOrValue<BytesLike>,
@@ -434,6 +456,12 @@ export interface WastePriceProvider extends BaseContract {
 
     setRelayer(
       newRelayer: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setWastePrice(
+      wasteTypeId: PromiseOrValue<BigNumberish>,
+      price: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -548,6 +576,12 @@ export interface WastePriceProvider extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    setWastePrice(
+      wasteTypeId: PromiseOrValue<BigNumberish>,
+      price: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     testFulfillRequest(
       requestId: PromiseOrValue<BytesLike>,
       response: PromiseOrValue<BytesLike>,
@@ -605,6 +639,12 @@ export interface WastePriceProvider extends BaseContract {
 
     setRelayer(
       newRelayer: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setWastePrice(
+      wasteTypeId: PromiseOrValue<BigNumberish>,
+      price: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

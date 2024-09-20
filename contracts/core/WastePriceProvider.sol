@@ -89,6 +89,16 @@ contract WastePriceProvider is FunctionsClient, ConfirmedOwner {
         fulfillRequest(requestId, response, err);
     }
 
+    /**
+     * @dev Sets the price of a specific waste type (only for testing purposes)
+     * @param wasteTypeId The ID of the waste type
+     * @param price The price in USDC per gram, scaled by 1e18
+     */
+    function setWastePrice(uint256 wasteTypeId, uint256 price) external onlyOwner {
+        wastePrices[wasteTypeId] = price;
+        emit PriceUpdated(wasteTypeId, price);
+    }
+
     function getWastePrice(uint256 wasteTypeId) external view returns (uint256) {
         return wastePrices[wasteTypeId];
     }
