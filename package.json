@@ -83,6 +83,8 @@
     "web3": "^1.7.0"
   },
   "dependencies": {
+    "@chainlink/contracts": "^1.2.0",
+    "@chainlink/contracts-ccip": "^0.7.3",
     "@openzeppelin/contracts": "^4.5.0",
     "@openzeppelin/contracts-upgradeable": "^4.5.2",
     "@openzeppelin/hardhat-upgrades": "^1.17.0",
