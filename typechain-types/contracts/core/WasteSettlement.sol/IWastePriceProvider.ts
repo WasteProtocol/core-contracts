@@ -4,7 +4,6 @@
 import type {
   BaseContract,
   BigNumber,
-  BigNumberish,
   BytesLike,
   CallOverrides,
   PopulatedTransaction,
@@ -23,14 +22,14 @@ import type {
 
 export interface IWastePriceProviderInterface extends utils.Interface {
   functions: {
-    "getWastePrice(uint256)": FunctionFragment;
+    "getWastePrice(string)": FunctionFragment;
   };
 
   getFunction(nameOrSignatureOrTopic: "getWastePrice"): FunctionFragment;
 
   encodeFunctionData(
     functionFragment: "getWastePrice",
-    values: [PromiseOrValue<BigNumberish>]
+    values: [PromiseOrValue<string>]
   ): string;
 
   decodeFunctionResult(
@@ -69,19 +68,19 @@ export interface IWastePriceProvider extends BaseContract {
 
   functions: {
     getWastePrice(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
   };
 
   getWastePrice(
-    wasteTypeId: PromiseOrValue<BigNumberish>,
+    wasteTypeId: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
   callStatic: {
     getWastePrice(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
   };
@@ -90,14 +89,14 @@ export interface IWastePriceProvider extends BaseContract {
 
   estimateGas: {
     getWastePrice(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
     getWastePrice(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };

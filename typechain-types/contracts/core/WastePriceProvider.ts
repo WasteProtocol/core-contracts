@@ -30,33 +30,37 @@ import type {
 export interface WastePriceProviderInterface extends utils.Interface {
   functions: {
     "acceptOwnership()": FunctionFragment;
+    "checkStringHasValue(string)": FunctionFragment;
     "donID()": FunctionFragment;
     "gasLimit()": FunctionFragment;
-    "getWastePrice(uint256)": FunctionFragment;
+    "getWastePrice(string)": FunctionFragment;
     "handleOracleFulfillment(bytes32,bytes,bytes)": FunctionFragment;
+    "isStringEmpty(string)": FunctionFragment;
     "owner()": FunctionFragment;
     "relayer()": FunctionFragment;
-    "requestWastePrice(uint256)": FunctionFragment;
+    "requestWastePrice(string)": FunctionFragment;
     "requestWasteType(bytes32)": FunctionFragment;
     "router()": FunctionFragment;
     "s_lastError()": FunctionFragment;
     "s_lastRequestId()": FunctionFragment;
     "s_lastResponse()": FunctionFragment;
     "setRelayer(address)": FunctionFragment;
-    "setWastePrice(uint256,uint256)": FunctionFragment;
+    "setWastePrice(string,uint256)": FunctionFragment;
     "subscriptionId()": FunctionFragment;
     "testFulfillRequest(bytes32,bytes,bytes)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "wastePrices(uint256)": FunctionFragment;
+    "wastePrices(string)": FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
       | "acceptOwnership"
+      | "checkStringHasValue"
       | "donID"
       | "gasLimit"
       | "getWastePrice"
       | "handleOracleFulfillment"
+      | "isStringEmpty"
       | "owner"
       | "relayer"
       | "requestWastePrice"
@@ -77,11 +81,15 @@ export interface WastePriceProviderInterface extends utils.Interface {
     functionFragment: "acceptOwnership",
     values?: undefined
   ): string;
+  encodeFunctionData(
+    functionFragment: "checkStringHasValue",
+    values: [PromiseOrValue<string>]
+  ): string;
   encodeFunctionData(functionFragment: "donID", values?: undefined): string;
   encodeFunctionData(functionFragment: "gasLimit", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "getWastePrice",
-    values: [PromiseOrValue<BigNumberish>]
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "handleOracleFulfillment",
@@ -91,11 +99,15 @@ export interface WastePriceProviderInterface extends utils.Interface {
       PromiseOrValue<BytesLike>
     ]
   ): string;
+  encodeFunctionData(
+    functionFragment: "isStringEmpty",
+    values: [PromiseOrValue<string>]
+  ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(functionFragment: "relayer", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "requestWastePrice",
-    values: [PromiseOrValue<BigNumberish>]
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "requestWasteType",
@@ -120,7 +132,7 @@ export interface WastePriceProviderInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "setWastePrice",
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "subscriptionId",
@@ -140,11 +152,15 @@ export interface WastePriceProviderInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "wastePrices",
-    values: [PromiseOrValue<BigNumberish>]
+    values: [PromiseOrValue<string>]
   ): string;
 
   decodeFunctionResult(
     functionFragment: "acceptOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "checkStringHasValue",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "donID", data: BytesLike): Result;
@@ -155,6 +171,10 @@ export interface WastePriceProviderInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "handleOracleFulfillment",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "isStringEmpty",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
@@ -205,10 +225,10 @@ export interface WastePriceProviderInterface extends utils.Interface {
   events: {
     "OwnershipTransferRequested(address,address)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
-    "PriceUpdated(uint256,uint256)": EventFragment;
+    "PriceUpdated(string,uint256)": EventFragment;
     "RequestFulfilled(bytes32)": EventFragment;
     "RequestSent(bytes32)": EventFragment;
-    "Response(bytes32,uint256,bytes,bytes)": EventFragment;
+    "Response(bytes32,string,bytes,bytes)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferRequested"): EventFragment;
@@ -244,11 +264,11 @@ export type OwnershipTransferredEventFilter =
   TypedEventFilter<OwnershipTransferredEvent>;
 
 export interface PriceUpdatedEventObject {
-  wasteType: BigNumber;
+  wasteType: string;
   price: BigNumber;
 }
 export type PriceUpdatedEvent = TypedEvent<
-  [BigNumber, BigNumber],
+  [string, BigNumber],
   PriceUpdatedEventObject
 >;
 
@@ -274,12 +294,12 @@ export type RequestSentEventFilter = TypedEventFilter<RequestSentEvent>;
 
 export interface ResponseEventObject {
   requestId: string;
-  wasteType: BigNumber;
+  wasteType: string;
   response: string;
   err: string;
 }
 export type ResponseEvent = TypedEvent<
-  [string, BigNumber, string, string],
+  [string, string, string, string],
   ResponseEventObject
 >;
 
@@ -316,12 +336,17 @@ export interface WastePriceProvider extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    checkStringHasValue(
+      str: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
     donID(overrides?: CallOverrides): Promise<[string]>;
 
     gasLimit(overrides?: CallOverrides): Promise<[number]>;
 
     getWastePrice(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
@@ -332,19 +357,24 @@ export interface WastePriceProvider extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    isStringEmpty(
+      str: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     relayer(overrides?: CallOverrides): Promise<[string]>;
 
     requestWastePrice(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     requestWasteType(
       arg0: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    ): Promise<[string]>;
 
     router(overrides?: CallOverrides): Promise<[string]>;
 
@@ -360,7 +390,7 @@ export interface WastePriceProvider extends BaseContract {
     ): Promise<ContractTransaction>;
 
     setWastePrice(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       price: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -380,7 +410,7 @@ export interface WastePriceProvider extends BaseContract {
     ): Promise<ContractTransaction>;
 
     wastePrices(
-      arg0: PromiseOrValue<BigNumberish>,
+      arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
   };
@@ -389,12 +419,17 @@ export interface WastePriceProvider extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  checkStringHasValue(
+    str: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
   donID(overrides?: CallOverrides): Promise<string>;
 
   gasLimit(overrides?: CallOverrides): Promise<number>;
 
   getWastePrice(
-    wasteTypeId: PromiseOrValue<BigNumberish>,
+    wasteTypeId: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -405,19 +440,24 @@ export interface WastePriceProvider extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  isStringEmpty(
+    str: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
   owner(overrides?: CallOverrides): Promise<string>;
 
   relayer(overrides?: CallOverrides): Promise<string>;
 
   requestWastePrice(
-    wasteTypeId: PromiseOrValue<BigNumberish>,
+    wasteTypeId: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   requestWasteType(
     arg0: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
-  ): Promise<BigNumber>;
+  ): Promise<string>;
 
   router(overrides?: CallOverrides): Promise<string>;
 
@@ -433,7 +473,7 @@ export interface WastePriceProvider extends BaseContract {
   ): Promise<ContractTransaction>;
 
   setWastePrice(
-    wasteTypeId: PromiseOrValue<BigNumberish>,
+    wasteTypeId: PromiseOrValue<string>,
     price: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -453,19 +493,24 @@ export interface WastePriceProvider extends BaseContract {
   ): Promise<ContractTransaction>;
 
   wastePrices(
-    arg0: PromiseOrValue<BigNumberish>,
+    arg0: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
   callStatic: {
     acceptOwnership(overrides?: CallOverrides): Promise<void>;
 
+    checkStringHasValue(
+      str: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
     donID(overrides?: CallOverrides): Promise<string>;
 
     gasLimit(overrides?: CallOverrides): Promise<number>;
 
     getWastePrice(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -476,19 +521,24 @@ export interface WastePriceProvider extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    isStringEmpty(
+      str: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
     owner(overrides?: CallOverrides): Promise<string>;
 
     relayer(overrides?: CallOverrides): Promise<string>;
 
     requestWastePrice(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     requestWasteType(
       arg0: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    ): Promise<string>;
 
     router(overrides?: CallOverrides): Promise<string>;
 
@@ -504,7 +554,7 @@ export interface WastePriceProvider extends BaseContract {
     ): Promise<void>;
 
     setWastePrice(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       price: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -524,7 +574,7 @@ export interface WastePriceProvider extends BaseContract {
     ): Promise<void>;
 
     wastePrices(
-      arg0: PromiseOrValue<BigNumberish>,
+      arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
   };
@@ -548,7 +598,7 @@ export interface WastePriceProvider extends BaseContract {
       to?: PromiseOrValue<string> | null
     ): OwnershipTransferredEventFilter;
 
-    "PriceUpdated(uint256,uint256)"(
+    "PriceUpdated(string,uint256)"(
       wasteType?: null,
       price?: null
     ): PriceUpdatedEventFilter;
@@ -566,7 +616,7 @@ export interface WastePriceProvider extends BaseContract {
     ): RequestSentEventFilter;
     RequestSent(id?: PromiseOrValue<BytesLike> | null): RequestSentEventFilter;
 
-    "Response(bytes32,uint256,bytes,bytes)"(
+    "Response(bytes32,string,bytes,bytes)"(
       requestId?: PromiseOrValue<BytesLike> | null,
       wasteType?: null,
       response?: null,
@@ -585,12 +635,17 @@ export interface WastePriceProvider extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    checkStringHasValue(
+      str: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     donID(overrides?: CallOverrides): Promise<BigNumber>;
 
     gasLimit(overrides?: CallOverrides): Promise<BigNumber>;
 
     getWastePrice(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -601,12 +656,17 @@ export interface WastePriceProvider extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    isStringEmpty(
+      str: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     relayer(overrides?: CallOverrides): Promise<BigNumber>;
 
     requestWastePrice(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -629,7 +689,7 @@ export interface WastePriceProvider extends BaseContract {
     ): Promise<BigNumber>;
 
     setWastePrice(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       price: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -649,7 +709,7 @@ export interface WastePriceProvider extends BaseContract {
     ): Promise<BigNumber>;
 
     wastePrices(
-      arg0: PromiseOrValue<BigNumberish>,
+      arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
   };
@@ -659,12 +719,17 @@ export interface WastePriceProvider extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    checkStringHasValue(
+      str: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     donID(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     gasLimit(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getWastePrice(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -675,12 +740,17 @@ export interface WastePriceProvider extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    isStringEmpty(
+      str: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     relayer(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     requestWastePrice(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -703,7 +773,7 @@ export interface WastePriceProvider extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     setWastePrice(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       price: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
@@ -723,7 +793,7 @@ export interface WastePriceProvider extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     wastePrices(
-      arg0: PromiseOrValue<BigNumberish>,
+      arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };

@@ -9,11 +9,11 @@ interface IWasteToken {
 }
 
 interface IWastePriceProvider {
-    function getWastePrice(uint256 wasteTypeId) external view returns (uint256);
+    function getWastePrice(string memory wasteTypeId) external view returns (uint256);
 }
 
 interface IWasteDataProvider {
-    function getCarbonEmissionRate(uint256 wasteTypeId) external view returns (uint256);
+    function getCarbonEmissionRate(string memory wasteTypeId) external view returns (uint256);
 }
 
 interface ISocialNodeRegistry {
@@ -24,7 +24,7 @@ contract WasteSettlement is Ownable {
     struct WasteTrade {
         address user;
         address approver;
-        uint256[] wasteTypeIds;
+        string[] wasteTypeIds;
         uint256[] amounts; // Amounts in grams
         bool approved;
         bool rejected;
@@ -75,7 +75,7 @@ contract WasteSettlement is Ownable {
     }
 
     // Submit a trade for waste processing
-    function submitWasteTrade(address userAddress, uint256[] calldata wasteTypeIds, uint256[] calldata amounts) external {
+    function submitWasteTrade(address userAddress, string[] memory  wasteTypeIds, uint256[] calldata amounts) external {
         require(wasteTypeIds.length == amounts.length, "Mismatched inputs");
         require(wasteTypeIds.length > 0, "No waste submitted");
 
@@ -130,7 +130,7 @@ contract WasteSettlement is Ownable {
         uint256 totalUSDCAmount = 0;
         uint256 totalEmissionAmount = 0;
         for (uint256 i = 0; i < trade.wasteTypeIds.length; i++) {
-            uint256 wasteTypeId = trade.wasteTypeIds[i];
+            string memory wasteTypeId = trade.wasteTypeIds[i];
             uint256 amount = trade.amounts[i]; // in grams
 
             // Fetch the waste price and carbon emission rate

@@ -4,7 +4,6 @@
 import type {
   BaseContract,
   BigNumber,
-  BigNumberish,
   BytesLike,
   CallOverrides,
   PopulatedTransaction,
@@ -23,7 +22,7 @@ import type {
 
 export interface IWasteDataProviderInterface extends utils.Interface {
   functions: {
-    "getCarbonEmissionRate(uint256)": FunctionFragment;
+    "getCarbonEmissionRate(string)": FunctionFragment;
   };
 
   getFunction(
@@ -32,7 +31,7 @@ export interface IWasteDataProviderInterface extends utils.Interface {
 
   encodeFunctionData(
     functionFragment: "getCarbonEmissionRate",
-    values: [PromiseOrValue<BigNumberish>]
+    values: [PromiseOrValue<string>]
   ): string;
 
   decodeFunctionResult(
@@ -71,19 +70,19 @@ export interface IWasteDataProvider extends BaseContract {
 
   functions: {
     getCarbonEmissionRate(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
   };
 
   getCarbonEmissionRate(
-    wasteTypeId: PromiseOrValue<BigNumberish>,
+    wasteTypeId: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
   callStatic: {
     getCarbonEmissionRate(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
   };
@@ -92,14 +91,14 @@ export interface IWasteDataProvider extends BaseContract {
 
   estimateGas: {
     getCarbonEmissionRate(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
     getCarbonEmissionRate(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };

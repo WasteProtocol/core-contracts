@@ -24,5 +24,5 @@ module.exports = async function ({ ethers, network, getNamedAccounts, deployment
   // TODO: add data
 };
 
-module.exports.tags = [contractName, 'Token'];
+module.exports.tags = [contractName, 'Provider', 'Core'];
 module.exports.dependencies = [];

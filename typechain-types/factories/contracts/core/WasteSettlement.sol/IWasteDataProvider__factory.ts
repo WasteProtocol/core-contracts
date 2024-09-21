@@ -13,9 +13,9 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "uint256",
+        internalType: "string",
         name: "wasteTypeId",
-        type: "uint256",
+        type: "string",
       },
     ],
     name: "getCarbonEmissionRate",

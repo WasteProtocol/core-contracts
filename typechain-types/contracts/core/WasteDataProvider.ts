@@ -29,29 +29,29 @@ import type {
 
 export declare namespace WasteDataProvider {
   export type WasteTypeStruct = {
-    id: PromiseOrValue<BigNumberish>;
+    id: PromiseOrValue<string>;
     name: PromiseOrValue<string>;
   };
 
-  export type WasteTypeStructOutput = [BigNumber, string] & {
-    id: BigNumber;
+  export type WasteTypeStructOutput = [string, string] & {
+    id: string;
     name: string;
   };
 
   export type WasteCategoryStruct = {
-    id: PromiseOrValue<BigNumberish>;
+    id: PromiseOrValue<string>;
     name: PromiseOrValue<string>;
     emissionRate: PromiseOrValue<BigNumberish>;
     wasteTypes: WasteDataProvider.WasteTypeStruct[];
   };
 
   export type WasteCategoryStructOutput = [
-    BigNumber,
+    string,
     string,
     BigNumber,
     WasteDataProvider.WasteTypeStructOutput[]
   ] & {
-    id: BigNumber;
+    id: string;
     name: string;
     emissionRate: BigNumber;
     wasteTypes: WasteDataProvider.WasteTypeStructOutput[];
@@ -60,28 +60,32 @@ export declare namespace WasteDataProvider {
 
 export interface WasteDataProviderInterface extends utils.Interface {
   functions: {
-    "addOrUpdateCategory(uint256,string,uint256)": FunctionFragment;
-    "addWasteTypeToCategory(uint256,uint256,string)": FunctionFragment;
-    "getCarbonEmissionRate(uint256)": FunctionFragment;
-    "getCategoryByWasteType(uint256)": FunctionFragment;
-    "getWasteTypes(uint256)": FunctionFragment;
+    "addOrUpdateCategory(string,string,uint256)": FunctionFragment;
+    "addWasteTypeToCategory(string,string,string)": FunctionFragment;
+    "checkStringHasValue(string)": FunctionFragment;
+    "getCarbonEmissionRate(string)": FunctionFragment;
+    "getCategoryByWasteType(string)": FunctionFragment;
+    "getWasteTypes(string)": FunctionFragment;
+    "isStringEmpty(string)": FunctionFragment;
     "owner()": FunctionFragment;
-    "removeCategory(uint256)": FunctionFragment;
-    "removeWasteType(uint256)": FunctionFragment;
-    "setCarbonEmissionRate(uint256,uint256)": FunctionFragment;
+    "removeCategory(string)": FunctionFragment;
+    "removeWasteType(string)": FunctionFragment;
+    "setCarbonEmissionRate(string,uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "updateWasteType(uint256,string)": FunctionFragment;
-    "wasteCategories(uint256)": FunctionFragment;
-    "wasteTypeToCategory(uint256)": FunctionFragment;
+    "updateWasteType(string,string)": FunctionFragment;
+    "wasteCategories(string)": FunctionFragment;
+    "wasteTypeToCategory(string)": FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
       | "addOrUpdateCategory"
       | "addWasteTypeToCategory"
+      | "checkStringHasValue"
       | "getCarbonEmissionRate"
       | "getCategoryByWasteType"
       | "getWasteTypes"
+      | "isStringEmpty"
       | "owner"
       | "removeCategory"
       | "removeWasteType"
@@ -95,7 +99,7 @@ export interface WasteDataProviderInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "addOrUpdateCategory",
     values: [
-      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>,
       PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>
     ]
@@ -103,35 +107,43 @@ export interface WasteDataProviderInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "addWasteTypeToCategory",
     values: [
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
       PromiseOrValue<string>
     ]
   ): string;
   encodeFunctionData(
+    functionFragment: "checkStringHasValue",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "getCarbonEmissionRate",
-    values: [PromiseOrValue<BigNumberish>]
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "getCategoryByWasteType",
-    values: [PromiseOrValue<BigNumberish>]
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "getWasteTypes",
-    values: [PromiseOrValue<BigNumberish>]
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "isStringEmpty",
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "removeCategory",
-    values: [PromiseOrValue<BigNumberish>]
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "removeWasteType",
-    values: [PromiseOrValue<BigNumberish>]
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "setCarbonEmissionRate",
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
@@ -139,15 +151,15 @@ export interface WasteDataProviderInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "updateWasteType",
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
+    values: [PromiseOrValue<string>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "wasteCategories",
-    values: [PromiseOrValue<BigNumberish>]
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "wasteTypeToCategory",
-    values: [PromiseOrValue<BigNumberish>]
+    values: [PromiseOrValue<string>]
   ): string;
 
   decodeFunctionResult(
@@ -159,6 +171,10 @@ export interface WasteDataProviderInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "checkStringHasValue",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getCarbonEmissionRate",
     data: BytesLike
   ): Result;
@@ -168,6 +184,10 @@ export interface WasteDataProviderInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getWasteTypes",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "isStringEmpty",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
@@ -201,11 +221,11 @@ export interface WasteDataProviderInterface extends utils.Interface {
   ): Result;
 
   events: {
-    "CategoryAddedOrUpdated(uint256,string,uint256)": EventFragment;
-    "CategoryRemoved(uint256)": EventFragment;
-    "WasteTypeAdded(uint256,uint256,string)": EventFragment;
-    "WasteTypeRemoved(uint256,uint256)": EventFragment;
-    "WasteTypeUpdated(uint256,uint256,string)": EventFragment;
+    "CategoryAddedOrUpdated(string,string,uint256)": EventFragment;
+    "CategoryRemoved(string)": EventFragment;
+    "WasteTypeAdded(string,string,string)": EventFragment;
+    "WasteTypeRemoved(string,string)": EventFragment;
+    "WasteTypeUpdated(string,string,string)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "CategoryAddedOrUpdated"): EventFragment;
@@ -216,12 +236,12 @@ export interface WasteDataProviderInterface extends utils.Interface {
 }
 
 export interface CategoryAddedOrUpdatedEventObject {
-  categoryId: BigNumber;
+  categoryId: string;
   name: string;
   emissionRate: BigNumber;
 }
 export type CategoryAddedOrUpdatedEvent = TypedEvent<
-  [BigNumber, string, BigNumber],
+  [string, string, BigNumber],
   CategoryAddedOrUpdatedEventObject
 >;
 
@@ -229,33 +249,33 @@ export type CategoryAddedOrUpdatedEventFilter =
   TypedEventFilter<CategoryAddedOrUpdatedEvent>;
 
 export interface CategoryRemovedEventObject {
-  categoryId: BigNumber;
+  categoryId: string;
 }
 export type CategoryRemovedEvent = TypedEvent<
-  [BigNumber],
+  [string],
   CategoryRemovedEventObject
 >;
 
 export type CategoryRemovedEventFilter = TypedEventFilter<CategoryRemovedEvent>;
 
 export interface WasteTypeAddedEventObject {
-  categoryId: BigNumber;
-  wasteTypeId: BigNumber;
+  categoryId: string;
+  wasteTypeId: string;
   name: string;
 }
 export type WasteTypeAddedEvent = TypedEvent<
-  [BigNumber, BigNumber, string],
+  [string, string, string],
   WasteTypeAddedEventObject
 >;
 
 export type WasteTypeAddedEventFilter = TypedEventFilter<WasteTypeAddedEvent>;
 
 export interface WasteTypeRemovedEventObject {
-  categoryId: BigNumber;
-  wasteTypeId: BigNumber;
+  categoryId: string;
+  wasteTypeId: string;
 }
 export type WasteTypeRemovedEvent = TypedEvent<
-  [BigNumber, BigNumber],
+  [string, string],
   WasteTypeRemovedEventObject
 >;
 
@@ -263,12 +283,12 @@ export type WasteTypeRemovedEventFilter =
   TypedEventFilter<WasteTypeRemovedEvent>;
 
 export interface WasteTypeUpdatedEventObject {
-  categoryId: BigNumber;
-  wasteTypeId: BigNumber;
+  categoryId: string;
+  wasteTypeId: string;
   newName: string;
 }
 export type WasteTypeUpdatedEvent = TypedEvent<
-  [BigNumber, BigNumber, string],
+  [string, string, string],
   WasteTypeUpdatedEventObject
 >;
 
@@ -303,48 +323,58 @@ export interface WasteDataProvider extends BaseContract {
 
   functions: {
     addOrUpdateCategory(
-      categoryId: PromiseOrValue<BigNumberish>,
+      categoryId: PromiseOrValue<string>,
       name: PromiseOrValue<string>,
       emissionRate: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     addWasteTypeToCategory(
-      categoryId: PromiseOrValue<BigNumberish>,
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      categoryId: PromiseOrValue<string>,
+      wasteTypeId: PromiseOrValue<string>,
       name: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    checkStringHasValue(
+      str: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
     getCarbonEmissionRate(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
     getCategoryByWasteType(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[WasteDataProvider.WasteCategoryStructOutput]>;
 
     getWasteTypes(
-      categoryId: PromiseOrValue<BigNumberish>,
+      categoryId: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[WasteDataProvider.WasteTypeStructOutput[]]>;
+
+    isStringEmpty(
+      str: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     removeCategory(
-      categoryId: PromiseOrValue<BigNumberish>,
+      categoryId: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     removeWasteType(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     setCarbonEmissionRate(
-      categoryId: PromiseOrValue<BigNumberish>,
+      categoryId: PromiseOrValue<string>,
       rate: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -355,71 +385,81 @@ export interface WasteDataProvider extends BaseContract {
     ): Promise<ContractTransaction>;
 
     updateWasteType(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       newName: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     wasteCategories(
-      arg0: PromiseOrValue<BigNumberish>,
+      arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, string, BigNumber] & {
-        id: BigNumber;
+      [string, string, BigNumber] & {
+        id: string;
         name: string;
         emissionRate: BigNumber;
       }
     >;
 
     wasteTypeToCategory(
-      arg0: PromiseOrValue<BigNumberish>,
+      arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    ): Promise<[string]>;
   };
 
   addOrUpdateCategory(
-    categoryId: PromiseOrValue<BigNumberish>,
+    categoryId: PromiseOrValue<string>,
     name: PromiseOrValue<string>,
     emissionRate: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   addWasteTypeToCategory(
-    categoryId: PromiseOrValue<BigNumberish>,
-    wasteTypeId: PromiseOrValue<BigNumberish>,
+    categoryId: PromiseOrValue<string>,
+    wasteTypeId: PromiseOrValue<string>,
     name: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  checkStringHasValue(
+    str: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
   getCarbonEmissionRate(
-    wasteTypeId: PromiseOrValue<BigNumberish>,
+    wasteTypeId: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
   getCategoryByWasteType(
-    wasteTypeId: PromiseOrValue<BigNumberish>,
+    wasteTypeId: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<WasteDataProvider.WasteCategoryStructOutput>;
 
   getWasteTypes(
-    categoryId: PromiseOrValue<BigNumberish>,
+    categoryId: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<WasteDataProvider.WasteTypeStructOutput[]>;
+
+  isStringEmpty(
+    str: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
   removeCategory(
-    categoryId: PromiseOrValue<BigNumberish>,
+    categoryId: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   removeWasteType(
-    wasteTypeId: PromiseOrValue<BigNumberish>,
+    wasteTypeId: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   setCarbonEmissionRate(
-    categoryId: PromiseOrValue<BigNumberish>,
+    categoryId: PromiseOrValue<string>,
     rate: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -430,71 +470,81 @@ export interface WasteDataProvider extends BaseContract {
   ): Promise<ContractTransaction>;
 
   updateWasteType(
-    wasteTypeId: PromiseOrValue<BigNumberish>,
+    wasteTypeId: PromiseOrValue<string>,
     newName: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   wasteCategories(
-    arg0: PromiseOrValue<BigNumberish>,
+    arg0: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<
-    [BigNumber, string, BigNumber] & {
-      id: BigNumber;
+    [string, string, BigNumber] & {
+      id: string;
       name: string;
       emissionRate: BigNumber;
     }
   >;
 
   wasteTypeToCategory(
-    arg0: PromiseOrValue<BigNumberish>,
+    arg0: PromiseOrValue<string>,
     overrides?: CallOverrides
-  ): Promise<BigNumber>;
+  ): Promise<string>;
 
   callStatic: {
     addOrUpdateCategory(
-      categoryId: PromiseOrValue<BigNumberish>,
+      categoryId: PromiseOrValue<string>,
       name: PromiseOrValue<string>,
       emissionRate: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     addWasteTypeToCategory(
-      categoryId: PromiseOrValue<BigNumberish>,
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      categoryId: PromiseOrValue<string>,
+      wasteTypeId: PromiseOrValue<string>,
       name: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
+    checkStringHasValue(
+      str: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
     getCarbonEmissionRate(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     getCategoryByWasteType(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<WasteDataProvider.WasteCategoryStructOutput>;
 
     getWasteTypes(
-      categoryId: PromiseOrValue<BigNumberish>,
+      categoryId: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<WasteDataProvider.WasteTypeStructOutput[]>;
+
+    isStringEmpty(
+      str: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
     removeCategory(
-      categoryId: PromiseOrValue<BigNumberish>,
+      categoryId: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     removeWasteType(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     setCarbonEmissionRate(
-      categoryId: PromiseOrValue<BigNumberish>,
+      categoryId: PromiseOrValue<string>,
       rate: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -505,74 +555,74 @@ export interface WasteDataProvider extends BaseContract {
     ): Promise<void>;
 
     updateWasteType(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       newName: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     wasteCategories(
-      arg0: PromiseOrValue<BigNumberish>,
+      arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, string, BigNumber] & {
-        id: BigNumber;
+      [string, string, BigNumber] & {
+        id: string;
         name: string;
         emissionRate: BigNumber;
       }
     >;
 
     wasteTypeToCategory(
-      arg0: PromiseOrValue<BigNumberish>,
+      arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    ): Promise<string>;
   };
 
   filters: {
-    "CategoryAddedOrUpdated(uint256,string,uint256)"(
-      categoryId?: PromiseOrValue<BigNumberish> | null,
+    "CategoryAddedOrUpdated(string,string,uint256)"(
+      categoryId?: PromiseOrValue<string> | null,
       name?: null,
       emissionRate?: null
     ): CategoryAddedOrUpdatedEventFilter;
     CategoryAddedOrUpdated(
-      categoryId?: PromiseOrValue<BigNumberish> | null,
+      categoryId?: PromiseOrValue<string> | null,
       name?: null,
       emissionRate?: null
     ): CategoryAddedOrUpdatedEventFilter;
 
-    "CategoryRemoved(uint256)"(
-      categoryId?: PromiseOrValue<BigNumberish> | null
+    "CategoryRemoved(string)"(
+      categoryId?: PromiseOrValue<string> | null
     ): CategoryRemovedEventFilter;
     CategoryRemoved(
-      categoryId?: PromiseOrValue<BigNumberish> | null
+      categoryId?: PromiseOrValue<string> | null
     ): CategoryRemovedEventFilter;
 
-    "WasteTypeAdded(uint256,uint256,string)"(
-      categoryId?: PromiseOrValue<BigNumberish> | null,
+    "WasteTypeAdded(string,string,string)"(
+      categoryId?: PromiseOrValue<string> | null,
       wasteTypeId?: null,
       name?: null
     ): WasteTypeAddedEventFilter;
     WasteTypeAdded(
-      categoryId?: PromiseOrValue<BigNumberish> | null,
+      categoryId?: PromiseOrValue<string> | null,
       wasteTypeId?: null,
       name?: null
     ): WasteTypeAddedEventFilter;
 
-    "WasteTypeRemoved(uint256,uint256)"(
-      categoryId?: PromiseOrValue<BigNumberish> | null,
+    "WasteTypeRemoved(string,string)"(
+      categoryId?: PromiseOrValue<string> | null,
       wasteTypeId?: null
     ): WasteTypeRemovedEventFilter;
     WasteTypeRemoved(
-      categoryId?: PromiseOrValue<BigNumberish> | null,
+      categoryId?: PromiseOrValue<string> | null,
       wasteTypeId?: null
     ): WasteTypeRemovedEventFilter;
 
-    "WasteTypeUpdated(uint256,uint256,string)"(
-      categoryId?: PromiseOrValue<BigNumberish> | null,
+    "WasteTypeUpdated(string,string,string)"(
+      categoryId?: PromiseOrValue<string> | null,
       wasteTypeId?: null,
       newName?: null
     ): WasteTypeUpdatedEventFilter;
     WasteTypeUpdated(
-      categoryId?: PromiseOrValue<BigNumberish> | null,
+      categoryId?: PromiseOrValue<string> | null,
       wasteTypeId?: null,
       newName?: null
     ): WasteTypeUpdatedEventFilter;
@@ -580,48 +630,58 @@ export interface WasteDataProvider extends BaseContract {
 
   estimateGas: {
     addOrUpdateCategory(
-      categoryId: PromiseOrValue<BigNumberish>,
+      categoryId: PromiseOrValue<string>,
       name: PromiseOrValue<string>,
       emissionRate: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     addWasteTypeToCategory(
-      categoryId: PromiseOrValue<BigNumberish>,
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      categoryId: PromiseOrValue<string>,
+      wasteTypeId: PromiseOrValue<string>,
       name: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    checkStringHasValue(
+      str: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getCarbonEmissionRate(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     getCategoryByWasteType(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     getWasteTypes(
-      categoryId: PromiseOrValue<BigNumberish>,
+      categoryId: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    isStringEmpty(
+      str: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     removeCategory(
-      categoryId: PromiseOrValue<BigNumberish>,
+      categoryId: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     removeWasteType(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     setCarbonEmissionRate(
-      categoryId: PromiseOrValue<BigNumberish>,
+      categoryId: PromiseOrValue<string>,
       rate: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -632,66 +692,76 @@ export interface WasteDataProvider extends BaseContract {
     ): Promise<BigNumber>;
 
     updateWasteType(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       newName: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     wasteCategories(
-      arg0: PromiseOrValue<BigNumberish>,
+      arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     wasteTypeToCategory(
-      arg0: PromiseOrValue<BigNumberish>,
+      arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
     addOrUpdateCategory(
-      categoryId: PromiseOrValue<BigNumberish>,
+      categoryId: PromiseOrValue<string>,
       name: PromiseOrValue<string>,
       emissionRate: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     addWasteTypeToCategory(
-      categoryId: PromiseOrValue<BigNumberish>,
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      categoryId: PromiseOrValue<string>,
+      wasteTypeId: PromiseOrValue<string>,
       name: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    checkStringHasValue(
+      str: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getCarbonEmissionRate(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     getCategoryByWasteType(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     getWasteTypes(
-      categoryId: PromiseOrValue<BigNumberish>,
+      categoryId: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    isStringEmpty(
+      str: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     removeCategory(
-      categoryId: PromiseOrValue<BigNumberish>,
+      categoryId: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     removeWasteType(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     setCarbonEmissionRate(
-      categoryId: PromiseOrValue<BigNumberish>,
+      categoryId: PromiseOrValue<string>,
       rate: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
@@ -702,18 +772,18 @@ export interface WasteDataProvider extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     updateWasteType(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
+      wasteTypeId: PromiseOrValue<string>,
       newName: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     wasteCategories(
-      arg0: PromiseOrValue<BigNumberish>,
+      arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     wasteTypeToCategory(
-      arg0: PromiseOrValue<BigNumberish>,
+      arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };

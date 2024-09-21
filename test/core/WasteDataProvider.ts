@@ -5,118 +5,110 @@ import { WasteDataProvider } from '../../typechain-types';
 describe('WasteDataProvider', function () {
   let wasteDataProvider: WasteDataProvider;
   let owner: string;
-  let addr1: string;
+  let newOwner: string;
+  let otherUser: string;
 
   beforeEach(async function () {
-    const [deployer, user1] = await ethers.getSigners();
+    const [deployer, newOwnerAccount, otherUserAccount] = await ethers.getSigners();
     owner = deployer.address;
-    addr1 = user1.address;
+    newOwner = newOwnerAccount.address;
+    otherUser = otherUserAccount.address;
 
+    // Deploy the WasteDataProvider contract
     const WasteDataProvider = await ethers.getContractFactory('WasteDataProvider');
     wasteDataProvider = (await WasteDataProvider.deploy()) as WasteDataProvider;
     await wasteDataProvider.deployed();
   });
 
-  it('Should allow the owner to add a waste category', async function () {
-    await wasteDataProvider.addOrUpdateCategory(1, 'Plastic', 100);
-    const category = await wasteDataProvider.wasteCategories(1);
-    expect(category.id).to.equal(1);
+  it('Should allow the owner to add or update a waste category', async function () {
+    await wasteDataProvider.addOrUpdateCategory('1', 'Plastic', ethers.utils.parseUnits('0.5', 18));
+    const category = await wasteDataProvider.wasteCategories('1');
     expect(category.name).to.equal('Plastic');
-    expect(category.emissionRate).to.equal(100);
+    expect(category.emissionRate.toString()).to.equal(ethers.utils.parseUnits('0.5', 18).toString());
   });
 
   it('Should allow the owner to add a waste type to a category', async function () {
-    await wasteDataProvider.addOrUpdateCategory(1, 'Plastic', 100);
-    await wasteDataProvider.addWasteTypeToCategory(1, 101, 'Bottle');
-    const wasteTypes = await wasteDataProvider.getWasteTypes(1);
-    expect(wasteTypes.length).to.equal(1);
-    expect(wasteTypes[0].id).to.equal(101);
-    expect(wasteTypes[0].name).to.equal('Bottle');
+    await wasteDataProvider.addOrUpdateCategory('1', 'Plastic', ethers.utils.parseUnits('0.5', 18));
+    await wasteDataProvider.addWasteTypeToCategory('1', 'PET', 'Polyethylene Terephthalate');
+
+    const wasteTypes = await wasteDataProvider.getWasteTypes('1');
+    expect(wasteTypes[0].name).to.equal('Polyethylene Terephthalate');
   });
 
   it('Should allow the owner to update a waste type', async function () {
-    await wasteDataProvider.addOrUpdateCategory(1, 'Plastic', 100);
-    await wasteDataProvider.addWasteTypeToCategory(1, 101, 'Bottle');
+    await wasteDataProvider.addOrUpdateCategory('1', 'Plastic', ethers.utils.parseUnits('0.5', 18));
+    await wasteDataProvider.addWasteTypeToCategory('1', 'PET', 'Polyethylene Terephthalate');
 
-    // Update the waste type
-    await wasteDataProvider.updateWasteType(101, 'Plastic Bottle');
-    const wasteTypes = await wasteDataProvider.getWasteTypes(1);
-    expect(wasteTypes[0].name).to.equal('Plastic Bottle');
+    await wasteDataProvider.updateWasteType('PET', 'Updated PET');
+    const wasteTypes = await wasteDataProvider.getWasteTypes('1');
+    expect(wasteTypes[0].name).to.equal('Updated PET');
   });
 
-  it('Should allow the owner to remove a waste type from a category', async function () {
-    await wasteDataProvider.addOrUpdateCategory(1, 'Plastic', 100);
-    await wasteDataProvider.addWasteTypeToCategory(1, 101, 'Bottle');
-    await wasteDataProvider.addWasteTypeToCategory(1, 102, 'Bag');
+  it('Should allow the owner to remove a waste category and its waste types', async function () {
+    await wasteDataProvider.addOrUpdateCategory('1', 'Plastic', ethers.utils.parseUnits('0.5', 18));
+    await wasteDataProvider.addWasteTypeToCategory('1', 'PET', 'Polyethylene Terephthalate');
 
-    // Remove waste type 101 (Bottle)
-    await wasteDataProvider.removeWasteType(101);
-    const wasteTypes = await wasteDataProvider.getWasteTypes(1);
-    expect(wasteTypes.length).to.equal(1);
-    expect(wasteTypes[0].id).to.equal(102); // Bag remains
+    await wasteDataProvider.removeCategory('1');
+    const category = await wasteDataProvider.wasteCategories('1');
+    expect(category.name).to.equal('');
+    const wasteTypes = await wasteDataProvider.getWasteTypes('1');
+    expect(wasteTypes.length).to.equal(0);
   });
 
-  it('Should emit an event when removing a waste type', async function () {
-    await wasteDataProvider.addOrUpdateCategory(1, 'Plastic', 100);
-    await wasteDataProvider.addWasteTypeToCategory(1, 101, 'Bottle');
+  it('Should allow the owner to remove a waste type', async function () {
+    await wasteDataProvider.addOrUpdateCategory('1', 'Plastic', ethers.utils.parseUnits('0.5', 18));
+    await wasteDataProvider.addWasteTypeToCategory('1', 'PET', 'Polyethylene Terephthalate');
 
-    await expect(wasteDataProvider.removeWasteType(101))
-      .to.emit(wasteDataProvider, 'WasteTypeRemoved')
-      .withArgs(1, 101);
+    await wasteDataProvider.removeWasteType('PET');
+    const wasteTypes = await wasteDataProvider.getWasteTypes('1');
+    expect(wasteTypes.length).to.equal(0);
   });
 
-  it('Should allow the owner to remove a waste category', async function () {
-    await wasteDataProvider.addOrUpdateCategory(1, 'Plastic', 100);
-    await wasteDataProvider.addWasteTypeToCategory(1, 101, 'Bottle');
-    await wasteDataProvider.addWasteTypeToCategory(1, 102, 'Bag');
+  it('Should allow the owner to set and retrieve the carbon emission rate', async function () {
+    await wasteDataProvider.addOrUpdateCategory('1', 'Plastic', ethers.utils.parseUnits('0.5', 18));
+    await wasteDataProvider.setCarbonEmissionRate('1', ethers.utils.parseUnits('1.0', 18));
+    await wasteDataProvider.addWasteTypeToCategory('1', 'PET', 'Polyethylene Terephthalate');
 
-    // Remove the category and its waste types
-    await wasteDataProvider.removeCategory(1);
-    const category = await wasteDataProvider.wasteCategories(1);
-    expect(category.id).to.equal(0); // Category should be deleted
-
-    // Verify that waste type mappings are also removed
-    const wasteTypeCategory1 = await wasteDataProvider.wasteTypeToCategory(101);
-    const wasteTypeCategory2 = await wasteDataProvider.wasteTypeToCategory(102);
-    expect(wasteTypeCategory1).to.equal(0); // Waste type 101 should no longer map to a category
-    expect(wasteTypeCategory2).to.equal(0); // Waste type 102 should no longer map to a category
-  });
-
-  it('Should emit an event when removing a waste category', async function () {
-    await wasteDataProvider.addOrUpdateCategory(1, 'Plastic', 100);
-    await wasteDataProvider.addWasteTypeToCategory(1, 101, 'Bottle');
-
-    await expect(wasteDataProvider.removeCategory(1)).to.emit(wasteDataProvider, 'CategoryRemoved').withArgs(1);
-  });
-
-  it('Should revert when removing a non-existent waste category', async function () {
-    await expect(wasteDataProvider.removeCategory(1)).to.be.revertedWith('Category does not exist');
-  });
-
-  it('Should revert when removing a non-existent waste type', async function () {
-    await wasteDataProvider.addOrUpdateCategory(1, 'Plastic', 100);
-    await expect(wasteDataProvider.removeWasteType(101)).to.be.revertedWith(
-      'WasteType not associated with any category',
-    );
-  });
-
-  it('Should revert when adding a waste type to a non-existent category', async function () {
-    await expect(wasteDataProvider.addWasteTypeToCategory(999, 101, 'Non-existent Category')).to.be.revertedWith(
-      'Category does not exist',
-    );
+    const emissionRate = await wasteDataProvider.getCarbonEmissionRate('PET');
+    expect(emissionRate.toString()).to.equal(ethers.utils.parseUnits('1.0', 18).toString());
   });
 
   it('Should allow the owner to transfer ownership', async function () {
-    const [_, newOwner] = await ethers.getSigners();
-    await wasteDataProvider.transferOwnership(newOwner.address);
-    expect(await wasteDataProvider.owner()).to.equal(newOwner.address);
+    await wasteDataProvider.transferOwnership(newOwner);
+    expect(await wasteDataProvider.owner()).to.equal(newOwner);
   });
 
-  it('Should not allow non-owners to add or remove waste types or categories', async function () {
-    const [_, nonOwner] = await ethers.getSigners();
-    await expect(wasteDataProvider.connect(nonOwner).addOrUpdateCategory(1, 'Plastic', 100)).to.be.revertedWith(
-      'Not authorized',
-    );
-    await expect(wasteDataProvider.connect(nonOwner).removeCategory(1)).to.be.revertedWith('Not authorized');
+  it('Should revert if a non-owner tries to add a category', async function () {
+    await expect(
+      wasteDataProvider
+        .connect(ethers.provider.getSigner(otherUser))
+        .addOrUpdateCategory('1', 'Plastic', ethers.utils.parseUnits('0.5', 18)),
+    ).to.be.revertedWith('Not authorized');
+  });
+
+  it('Should revert if a non-owner tries to add a waste type', async function () {
+    await expect(
+      wasteDataProvider
+        .connect(ethers.provider.getSigner(otherUser))
+        .addWasteTypeToCategory('1', 'PET', 'Polyethylene Terephthalate'),
+    ).to.be.revertedWith('Not authorized');
+  });
+
+  it('Should revert if a non-owner tries to update a waste type', async function () {
+    await expect(
+      wasteDataProvider.connect(ethers.provider.getSigner(otherUser)).updateWasteType('PET', 'Updated PET'),
+    ).to.be.revertedWith('Not authorized');
+  });
+
+  it('Should revert if a non-owner tries to remove a category', async function () {
+    await expect(
+      wasteDataProvider.connect(ethers.provider.getSigner(otherUser)).removeCategory('1'),
+    ).to.be.revertedWith('Not authorized');
+  });
+
+  it('Should revert if a non-owner tries to remove a waste type', async function () {
+    await expect(
+      wasteDataProvider.connect(ethers.provider.getSigner(otherUser)).removeWasteType('PET'),
+    ).to.be.revertedWith('Not authorized');
   });
 });

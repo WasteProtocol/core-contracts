@@ -24,5 +24,5 @@ module.exports = async function ({ ethers, network, getNamedAccounts, deployment
   // TODO : set default price
 };
 
-module.exports.tags = [contractName, 'PriceProvider'];
+module.exports.tags = [contractName, 'PriceProvider', 'Core'];
 module.exports.dependencies = [];

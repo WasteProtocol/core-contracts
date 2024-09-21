@@ -1,44 +1,48 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
+import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract WasteDataProvider {
+
+    using Strings for string;
+
     // Struct for waste types under each category
     struct WasteType {
-        uint256 id;
+        string id;
         string name;
     }
 
     // Struct for waste categories
     struct WasteCategory {
-        uint256 id;
+        string id;
         string name;
         uint256 emissionRate; // Emission rate for the category
         WasteType[] wasteTypes; // Array of waste types in this category
     }
 
     // Mapping from category ID to WasteCategory
-    mapping(uint256 => WasteCategory) public wasteCategories;
+    mapping(string => WasteCategory) public wasteCategories;
 
     // Mapping from waste type ID to the category it belongs to
-    mapping(uint256 => uint256) public wasteTypeToCategory;
+    mapping(string => string) public wasteTypeToCategory;
 
     // Address of the contract owner (officer)
     address public owner;
 
     // Event emitted when a category is added or updated
-    event CategoryAddedOrUpdated(uint256 indexed categoryId, string name, uint256 emissionRate);
+    event CategoryAddedOrUpdated(string indexed categoryId, string name, uint256 emissionRate);
 
     // Event emitted when a waste type is added to a category
-    event WasteTypeAdded(uint256 indexed categoryId, uint256 wasteTypeId, string name);
+    event WasteTypeAdded(string indexed categoryId, string wasteTypeId, string name);
 
     // Event emitted when a waste type is updated
-    event WasteTypeUpdated(uint256 indexed categoryId, uint256 wasteTypeId, string newName);
+    event WasteTypeUpdated(string indexed categoryId, string wasteTypeId, string newName);
 
     // Event emitted when a category is removed
-    event CategoryRemoved(uint256 indexed categoryId);
+    event CategoryRemoved(string indexed categoryId);
 
     // Event emitted when a waste type is removed
-    event WasteTypeRemoved(uint256 indexed categoryId, uint256 wasteTypeId);
+    event WasteTypeRemoved(string indexed categoryId, string wasteTypeId);
 
     // Modifier to restrict access to the owner
     modifier onlyOwner() {
@@ -52,7 +56,7 @@ contract WasteDataProvider {
     }
 
     // Function to add or update a waste category (onlyOwner)
-    function addOrUpdateCategory(uint256 categoryId, string memory name, uint256 emissionRate) external onlyOwner {
+    function addOrUpdateCategory(string memory categoryId, string memory name, uint256 emissionRate) external onlyOwner {
         WasteCategory storage category = wasteCategories[categoryId];
         category.id = categoryId;
         category.name = name;
@@ -61,9 +65,9 @@ contract WasteDataProvider {
     }
 
     // Function to add a waste type to a category (onlyOwner)
-    function addWasteTypeToCategory(uint256 categoryId, uint256 wasteTypeId, string memory name) external onlyOwner {
+    function addWasteTypeToCategory(string memory categoryId, string memory wasteTypeId, string memory name) external onlyOwner {
         WasteCategory storage category = wasteCategories[categoryId];
-        require(category.id != 0, "Category does not exist");
+        require(checkStringHasValue(category.id), "Category does not exist");
 
         WasteType memory newWasteType = WasteType({
             id: wasteTypeId,
@@ -76,16 +80,16 @@ contract WasteDataProvider {
     }
 
     // Function to update an existing waste type (onlyOwner)
-    function updateWasteType(uint256 wasteTypeId, string memory newName) external onlyOwner {
-        uint256 categoryId = wasteTypeToCategory[wasteTypeId];
-        require(categoryId != 0, "WasteType not associated with any category");
+    function updateWasteType(string memory wasteTypeId, string memory newName) external onlyOwner {
+        string memory categoryId = wasteTypeToCategory[wasteTypeId];
+        require(checkStringHasValue(categoryId), "WasteType not associated with any category");
 
         WasteCategory storage category = wasteCategories[categoryId];
 
         // Find and update the waste type within the category
         bool updated = false;
         for (uint256 i = 0; i < category.wasteTypes.length; i++) {
-            if (category.wasteTypes[i].id == wasteTypeId) {
+            if (category.wasteTypes[i].id.equal(wasteTypeId)) {
                 category.wasteTypes[i].name = newName;
                 updated = true;
                 emit WasteTypeUpdated(categoryId, wasteTypeId, newName);
@@ -97,13 +101,13 @@ contract WasteDataProvider {
     }
 
     // Function to remove a waste category and all its waste types (onlyOwner)
-    function removeCategory(uint256 categoryId) external onlyOwner {
+    function removeCategory(string memory categoryId) external onlyOwner {
         WasteCategory storage category = wasteCategories[categoryId];
-        require(category.id != 0, "Category does not exist");
+        require(checkStringHasValue(category.id), "Category does not exist");
 
         // Remove all waste types from the category
         for (uint256 i = 0; i < category.wasteTypes.length; i++) {
-            uint256 wasteTypeId = category.wasteTypes[i].id;
+            string memory wasteTypeId = category.wasteTypes[i].id;
             delete wasteTypeToCategory[wasteTypeId]; // Remove mapping of each waste type
         }
 
@@ -114,16 +118,16 @@ contract WasteDataProvider {
     }
 
     // Function to remove a waste type from a category (onlyOwner)
-    function removeWasteType(uint256 wasteTypeId) external onlyOwner {
-        uint256 categoryId = wasteTypeToCategory[wasteTypeId];
-        require(categoryId != 0, "WasteType not associated with any category");
+    function removeWasteType(string memory wasteTypeId) external onlyOwner {
+        string memory categoryId = wasteTypeToCategory[wasteTypeId];
+        require(checkStringHasValue(categoryId), "WasteType not associated with any category");
 
         WasteCategory storage category = wasteCategories[categoryId];
 
         // Find and remove the waste type within the category
         bool removed = false;
         for (uint256 i = 0; i < category.wasteTypes.length; i++) {
-            if (category.wasteTypes[i].id == wasteTypeId) {
+            if (category.wasteTypes[i].id.equal(wasteTypeId)) {
                 // Remove the waste type by swapping it with the last element and popping the array
                 category.wasteTypes[i] = category.wasteTypes[category.wasteTypes.length - 1];
                 category.wasteTypes.pop();
@@ -139,16 +143,15 @@ contract WasteDataProvider {
     }
 
     // Function to get waste types for a given category
-    function getWasteTypes(uint256 categoryId) external view returns (WasteType[] memory) {
+    function getWasteTypes(string memory categoryId) external view returns (WasteType[] memory) {
         WasteCategory storage category = wasteCategories[categoryId];
-        require(category.id != 0, "Category does not exist");
         return category.wasteTypes;
     }
 
     // Function to get the waste category by waste type ID
-    function getCategoryByWasteType(uint256 wasteTypeId) external view returns (WasteCategory memory) {
-        uint256 categoryId = wasteTypeToCategory[wasteTypeId];
-        require(categoryId != 0, "WasteType not associated with any category");
+    function getCategoryByWasteType(string memory wasteTypeId) external view returns (WasteCategory memory) {
+        string memory categoryId = wasteTypeToCategory[wasteTypeId];
+        require(checkStringHasValue(categoryId), "WasteType not associated with any category");
         return wasteCategories[categoryId];
     }
 
@@ -158,8 +161,8 @@ contract WasteDataProvider {
         owner = newOwner;
     }
 
-    function getCarbonEmissionRate(uint256 wasteTypeId) public view returns (uint256) {
-        uint256 categoryId = wasteTypeToCategory[wasteTypeId];
+    function getCarbonEmissionRate(string memory wasteTypeId) public view returns (uint256) {
+        string memory categoryId = wasteTypeToCategory[wasteTypeId];
         WasteCategory storage category = wasteCategories[categoryId];
         return category.emissionRate;
     }
@@ -169,8 +172,19 @@ contract WasteDataProvider {
      * @param categoryId The ID of the waste category
      * @param rate The carbon emission rate in g of CO2 per g of waste, scaled by 1e18
      */
-    function setCarbonEmissionRate(uint256 categoryId, uint256 rate) external onlyOwner {
+    function setCarbonEmissionRate(string memory categoryId, uint256 rate) external onlyOwner {
         WasteCategory storage category = wasteCategories[categoryId];
-        category.emissionRate  =rate;
+        category.emissionRate = rate;
     }
+
+    function isStringEmpty(string memory str) public pure returns (bool) {
+        // Convert string to bytes and check if the length is 0
+        return bytes(str).length == 0;
+    }
+
+    function checkStringHasValue(string memory str) public pure returns (bool) {
+        // If bytes length is greater than 0, the string has a value
+        return bytes(str).length > 0;
+    }
+
 }

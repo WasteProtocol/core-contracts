@@ -21,12 +21,6 @@ describe('WasteSettlement', function () {
   let owner: SignerWithAddress;
   let user: SignerWithAddress;
   let socialNode: SignerWithAddress;
-  /*before(async function () {
-    const [deployer, userAccount, socialNodeAccount, relayer] = await ethers.getSigners();
-    owner = deployer;
-    user = userAccount;
-    socialNode = socialNodeAccount.address;
-  })*/
 
   beforeEach(async function () {
     const [deployer, userAccount, socialNodeAccount, relayer] = await ethers.getSigners();
@@ -71,21 +65,23 @@ describe('WasteSettlement', function () {
     await wasteSettlement.deployed();
 
     // Set up initial USDC balance for testing
-    //await usdc.mint(user.address, ethers.utils.parseEther('1000')); // Mint 1000 USDC to user for testing
-    await usdc.mint(wasteSettlement.address, ethers.utils.parseEther('1000')); // Mint 1000 USDC to user for testing
-    await wasteToken.grantRole(ethers.utils.id('MINTER_ROLE'), wasteSettlement.address);
+    await usdc.mint(wasteSettlement.address, ethers.utils.parseEther('1000')); // Mint 1000 USDC to the WasteSettlement contract
+    await wasteToken.grantRole(ethers.utils.id('MINTER_ROLE'), wasteSettlement.address); // Grant the WasteSettlement contract the minter role for WasteToken
 
-    await wasteDataProvider.addOrUpdateCategory(1, 'plastic', 91234);
-    await wasteDataProvider.addOrUpdateCategory(2, 'paper', 10987);
-    await wasteDataProvider.addWasteTypeToCategory(1, 1, 'bottle');
-    await wasteDataProvider.addWasteTypeToCategory(2, 2, 'newspaper');
+    // Add waste categories and waste types to WasteDataProvider
+    await wasteDataProvider.addOrUpdateCategory('1', 'plastic', 91234); // Example waste type "plastic"
+    await wasteDataProvider.addOrUpdateCategory('2', 'paper', 10987); // Example waste type "paper"
+    await wasteDataProvider.addWasteTypeToCategory('1', '1', 'bottle'); // Adding waste type "bottle" to category "plastic"
+    await wasteDataProvider.addWasteTypeToCategory('2', '2', 'newspaper'); // Adding waste type "newspaper" to category "paper"
   });
 
   it('Should allow user to submit a trade', async function () {
-    const wasteTypeIds = [1, 2]; // Example waste types
+    const wasteTypeIds = ['1', '2']; // Example waste types
     const amounts = [100, 200]; // 100g and 200g respectively
 
-    await wasteSettlement.connect(user).submitWasteTrade(wasteTypeIds, amounts);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    await wasteSettlement.connect(user).submitWasteTrade(user.address, wasteTypeIds, amounts);
 
     const trade = await wasteSettlement.trades(0); // Check the first trade
     expect(trade.user).to.equal(user.address);
@@ -95,17 +91,17 @@ describe('WasteSettlement', function () {
   });
 
   it('Should allow Social Node to approve a trade and settle it', async function () {
-    const wasteTypeIds = [1, 2];
+    const wasteTypeIds = ['1', '2'];
     const amounts = [100, 200];
 
     // User submits the trade
-    await wasteSettlement.connect(user).submitWasteTrade(wasteTypeIds, amounts);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    await wasteSettlement.connect(user).submitWasteTrade(user.address, wasteTypeIds, amounts);
 
     // Mock the waste price and carbon emission rates using owner
-    await wastePriceProvider.connect(owner).setWastePrice(1, ethers.utils.parseEther('2')); // Waste type 1 price = 2 USDC/g
-    await wastePriceProvider.connect(owner).setWastePrice(2, ethers.utils.parseEther('3')); // Waste type 2 price = 3 USDC/g
-    //await wasteDataProvider.connect(owner).setCarbonEmissionRate(1, ethers.utils.parseEther('0.5')); // Emission rate for type 1
-    //await wasteDataProvider.connect(owner).setCarbonEmissionRate(2, ethers.utils.parseEther('1.0')); // Emission rate for type 2
+    await wastePriceProvider.connect(owner).setWastePrice('1', ethers.utils.parseEther('2')); // Waste type 1 price = 2 USDC/g
+    await wastePriceProvider.connect(owner).setWastePrice('2', ethers.utils.parseEther('3')); // Waste type 2 price = 3 USDC/g
 
     // Social Node approves the trade
     await wasteSettlement.connect(socialNode).approveTrade(0);
@@ -118,20 +114,22 @@ describe('WasteSettlement', function () {
     // Check WasteToken and USDC balances
     const userWasteTokenBalance = await wasteToken.balanceOf(user.address);
     const userUSDCBalance = await usdc.balanceOf(user.address);
-    // Expected amounts:
-    // WasteToken: (100g * 0.5) + (200g * 1.0) = 50 + 200 = 250 WasteToken
-    // USDC: (100g * 2) + (200g * 3) = 200 + 600 = 800 USDC
-    // 100*9.1234 + (200 * 10987) =
+
+    // Expected amounts based on the mock emission rates and prices:
+    // WasteToken: (100g * 91234) + (200g * 10987) = 9123400 + 2197400 = 11320800
+    // USDC: (100g * 2 USDC/g) + (200g * 3 USDC/g) = 200 + 600 = 800 USDC
     expect(userWasteTokenBalance).to.equal(ethers.utils.parseEther('1132.08'));
     expect(userUSDCBalance).to.equal(ethers.utils.parseEther('800'));
   });
 
   it('Should allow Social Node to reject a trade', async function () {
-    const wasteTypeIds = [1, 2];
+    const wasteTypeIds = ['1', '2'];
     const amounts = [100, 200];
 
     // User submits the trade
-    await wasteSettlement.connect(user).submitWasteTrade(wasteTypeIds, amounts);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    await wasteSettlement.connect(user).submitWasteTrade(user.address, wasteTypeIds, amounts);
 
     // Social Node rejects the trade
     await wasteSettlement.connect(socialNode).rejectTrade(0);
@@ -143,12 +141,14 @@ describe('WasteSettlement', function () {
   });
 
   it('Should return a paginated list of trades', async function () {
-    const wasteTypeIds = [1, 2];
+    const wasteTypeIds = ['1', '2'];
     const amounts = [100, 200];
 
     // User submits multiple trades
     for (let i = 0; i < 10; i++) {
-      await wasteSettlement.connect(user).submitWasteTrade(wasteTypeIds, amounts);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      await wasteSettlement.connect(user).submitWasteTrade(user.address, wasteTypeIds, amounts);
     }
 
     // Retrieve paginated trades (page 1, limit 5)
@@ -161,12 +161,14 @@ describe('WasteSettlement', function () {
   });
 
   it('Should revert when a non-SocialNode tries to approve or reject a trade', async function () {
-    const [_, userAccount, a, b, c, nonSocialNode] = await ethers.getSigners();
-    const wasteTypeIds = [1, 2];
+    const [_, userAccount, , , , nonSocialNode] = await ethers.getSigners();
+    const wasteTypeIds = ['1', '2'];
     const amounts = [100, 200];
 
     // User submits a trade
-    await wasteSettlement.connect(user).submitWasteTrade(wasteTypeIds, amounts);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    await wasteSettlement.connect(user).submitWasteTrade(user.address, wasteTypeIds, amounts);
 
     // Non-social node tries to approve
     await expect(wasteSettlement.connect(nonSocialNode).approveTrade(0)).to.be.revertedWith(

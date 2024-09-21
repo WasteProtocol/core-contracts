@@ -10,6 +10,8 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 contract WastePriceProvider is FunctionsClient, ConfirmedOwner {
     using FunctionsRequest for FunctionsRequest.Request;
 
+    using Strings for string;
+
     bytes32 public s_lastRequestId;
     bytes public s_lastResponse;
     bytes public s_lastError;
@@ -20,12 +22,12 @@ contract WastePriceProvider is FunctionsClient, ConfirmedOwner {
     uint64 public subscriptionId;
 
     address public relayer;
-    mapping(uint256 => uint256) public wastePrices;
-    mapping(bytes32 => uint256) public requestWasteType;
+    mapping(string => uint256) public wastePrices;
+    mapping(bytes32 => string) public requestWasteType;
 
     string source = "const wasteType = args[0];"
     "const apiResponse = await Functions.makeHttpRequest({url:`https://"
-    "asia-southeast1-waste-protocol.cloudfunctions.net/wastePrices?id=${wasteType}`});"
+    "asia-southeast1-waste-protocol.cloudfunctions.net/api/public/waste-items/${wasteType}`});"
     "if (apiResponse.error) {"
     "throw Error(`Request failed`);"
     "}"
@@ -34,8 +36,8 @@ contract WastePriceProvider is FunctionsClient, ConfirmedOwner {
     "const price = Math.floor(_price * Math.pow(10,18));"
     "return Functions.encodeUint256(price);";
 
-    event PriceUpdated(uint256 wasteType, uint256 price);
-    event Response(bytes32 indexed requestId, uint256 wasteType, bytes response, bytes err);
+    event PriceUpdated(string wasteType, uint256 price);
+    event Response(bytes32 indexed requestId, string wasteType, bytes response, bytes err);
 
     constructor(uint64 subscriptionId_, address relayer_) FunctionsClient(router) ConfirmedOwner(msg.sender) {
         subscriptionId = subscriptionId_;
@@ -52,12 +54,12 @@ contract WastePriceProvider is FunctionsClient, ConfirmedOwner {
         relayer = newRelayer;
     }
 
-    function requestWastePrice(uint256 wasteTypeId) external onlyRelayer {
+    function requestWastePrice(string memory wasteTypeId) external onlyRelayer {
         FunctionsRequest.Request memory req;
         req.initializeRequestForInlineJavaScript(source);
 
         string[] memory args = new string[](1);
-        args[0] = Strings.toString(wasteTypeId);
+        args[0] = wasteTypeId;
         req.setArgs(args);
 
         s_lastRequestId = _sendRequest(req.encodeCBOR(), subscriptionId, gasLimit, donID);
@@ -70,9 +72,9 @@ contract WastePriceProvider is FunctionsClient, ConfirmedOwner {
         bytes memory response,
         bytes memory err
     ) internal override {
-        require(requestWasteType[requestId] != 0, "Invalid requestId");
+        require(checkStringHasValue(requestWasteType[requestId]), "Invalid requestId");
 
-        uint256 wasteTypeId = requestWasteType[requestId];
+        string memory wasteTypeId = requestWasteType[requestId];
         uint256 price = uint256(bytes32(response));
         wastePrices[wasteTypeId] = price;
 
@@ -94,13 +96,23 @@ contract WastePriceProvider is FunctionsClient, ConfirmedOwner {
      * @param wasteTypeId The ID of the waste type
      * @param price The price in USDC per gram, scaled by 1e18
      */
-    function setWastePrice(uint256 wasteTypeId, uint256 price) external onlyOwner {
+    function setWastePrice(string memory wasteTypeId, uint256 price) external onlyOwner {
         wastePrices[wasteTypeId] = price;
         emit PriceUpdated(wasteTypeId, price);
     }
 
-    function getWastePrice(uint256 wasteTypeId) external view returns (uint256) {
+    function getWastePrice(string memory wasteTypeId) external view returns (uint256) {
         return wastePrices[wasteTypeId];
+    }
+
+    function isStringEmpty(string memory str) public pure returns (bool) {
+        // Convert string to bytes and check if the length is 0
+        return bytes(str).length == 0;
+    }
+
+    function checkStringHasValue(string memory str) public pure returns (bool) {
+        // If bytes length is greater than 0, the string has a value
+        return bytes(str).length > 0;
     }
 }
 
