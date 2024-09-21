@@ -103,7 +103,6 @@ await token.addMinter("0xdCE2395d97A307c6179f7ee8A7b843c768BE4221")
 8. test call
 
 ## Sepolia
-WastePriceProvider : 
 
 | Chain   | Name               | Address                                    |
 |---------|--------------------|--------------------------------------------|
@@ -115,3 +114,13 @@ WastePriceProvider :
 | Sepolia | WasteSettlement    | 0xdCE2395d97A307c6179f7ee8A7b843c768BE4221 |
 
 
+## Linea sepolia
+
+| Chain   | Name               | Address                                    |
+|---------|--------------------|--------------------------------------------|
+| Sepolia | WasteToken         | 0xa84aC71C1F6C5B533dA717f4eb88596bB2871aBf |
+| Sepolia | USDC               | 0x33533a67C62AcF8595CfDFC261F90b29bB617c39 |
+| Sepolia | SocialNodeRegistry |  |
+| Sepolia | WasteDataProvider  |  |
+| Sepolia | WastePriceProvider |  |
+| Sepolia | WasteSettlement    |  |

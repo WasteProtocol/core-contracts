@@ -80,6 +80,11 @@ const config: any = {
       url: 'https://eth-goerli.public.blastapi.io',
       chainId: 5,
     },
+    linea_testnet: {
+      accounts,
+      url: 'https://linea-sepolia.blockpi.network/v1/rpc/public',
+      chainId: 59141,
+    },
     sepolia: {
       accounts,
       url: 'https://rpc-sepolia.rockx.com',
@@ -110,6 +115,7 @@ const config: any = {
   etherscan: {
     apiKey: {
       goerli: 'KBZ53MKPP551QTVDYSV8S961FEUC96F8QW',
+      linea_testnet: 'BE73V3WIFAP2WP7SQBHV95AQBMN1URH4JP',
       sepolia: 'KBZ53MKPP551QTVDYSV8S961FEUC96F8QW',
       polygon_mumbai: 'FPHU3AFWJD2M3ECIKN61FPG1CIMN3IWF46',
       bkc_testnet: 'key',
@@ -123,6 +129,14 @@ const config: any = {
         urls: {
           apiURL: 'https://testnet.bkcscan.com/api',
           browserURL: 'https://testnet.bkcscan.com/',
+        },
+      },
+      {
+        network: 'linea_testnet',
+        chainId: 59141,
+        urls: {
+          apiURL: 'https://api-sepolia.lineascan.build/api',
+          browserURL: 'https://sepolia.lineascan.build/',
         },
       },
       {

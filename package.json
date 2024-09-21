@@ -30,7 +30,8 @@
     "verify:bkc_testnet": "hardhat run scripts/verify.js --network bkc_testnet",
     "verify:goerli": "hardhat run scripts/verify.js --network goerli",
     "verify:polygon_mumbai": "hardhat run scripts/verify.js --network polygon_mumbai",
-    "verify:sepolia": "hardhat run scripts/verify.js --network sepolia"
+    "verify:sepolia": "hardhat run scripts/verify.js --network sepolia",
+    "verify:linea_testnet": "hardhat run scripts/verify.js --network linea_testnet"
   },
   "repository": {
     "type": "git",
