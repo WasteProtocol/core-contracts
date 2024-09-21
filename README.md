@@ -45,3 +45,7 @@ Sepolia
 ```shell
 npm run verify:sepolia
 ```
+
+
+## Sepolia
+WastePriceProvider : 0x33533a67C62AcF8595CfDFC261F90b29bB617c39, 0xd0e6536434FeC1b508E878e5929c7b965815C8Ad

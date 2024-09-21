@@ -14,24 +14,24 @@ contract WastePriceProvider is FunctionsClient, ConfirmedOwner {
     bytes public s_lastResponse;
     bytes public s_lastError;
 
-    address router = 0xA9d587a00A31A52Ed70D6026794a8FC5E2F5dCb0;
-    bytes32 donID = 0x66756e2d6176616c616e6368652d66756a692d31000000000000000000000000;
-    uint32 gasLimit = 300000;
-    uint64 subscriptionId;
+    address public router = 0xb83E47C2bC239B3bf370bc41e1459A34b41238D0;
+    bytes32 public donID = 0x66756e2d657468657265756d2d7365706f6c69612d3100000000000000000000;
+    uint32 public gasLimit = 300000;
+    uint64 public subscriptionId;
 
     address public relayer;
     mapping(uint256 => uint256) public wastePrices;
     mapping(bytes32 => uint256) public requestWasteType;
 
     string source = "const wasteType = args[0];"
-    "const apiResponse = await Functions.makeHttpRequest({"
-    "url: `https://api.wastepricing.com/${wasteType}`"
-    "});"
+    "const apiResponse = await Functions.makeHttpRequest({url:'https://"
+    "asia-southeast1-waste-protocol.cloudfunctions.net/wastePrices/${wasteType}'});"
     "if (apiResponse.error) {"
     "throw Error(`Request failed`);"
     "}"
     "const { data } = apiResponse;"
-    "const price = Math.floor(data.price * Math.pow(10,18));"
+    "const _price = data.prices[2].price;"
+    "const price = Math.floor(_price * Math.pow(10,18));"
     "return Functions.encodeUint256(price);";
 
     event PriceUpdated(uint256 wasteType, uint256 price);

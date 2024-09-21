@@ -1,6 +1,6 @@
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 
-const contractName = 'WastePriceProvider';
+const contractName = 'GettingStartedFunctionsConsumer';
 
 module.exports = async function ({ ethers, network, getNamedAccounts, deployments }: HardhatRuntimeEnvironment) {
   const { provider } = ethers;
@@ -13,16 +13,14 @@ module.exports = async function ({ ethers, network, getNamedAccounts, deployment
   const chainId = network.config.chainId;
   const contract = await deploy(contractName, {
     from: deployer,
-    args: [3538, deployer],
+    args: [],
     log: true,
     deterministicDeployment: false,
   });
 
   console.log(`Contract ${contractName} was deployed at address ${contract.address} at chain id : ${chainId}`);
   console.log('==================');
-
-  // TODO : set default price
 };
 
-module.exports.tags = [contractName, 'PriceProvider'];
+module.exports.tags = [contractName, 'Sample'];
 module.exports.dependencies = [];

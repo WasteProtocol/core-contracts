@@ -58,3 +58,5 @@ export type { WasteSettlement } from "./contracts/core/WasteSettlement.sol/Waste
 export { WasteSettlement__factory } from "./factories/contracts/core/WasteSettlement.sol/WasteSettlement__factory";
 export type { WasteToken } from "./contracts/core/WasteToken";
 export { WasteToken__factory } from "./factories/contracts/core/WasteToken__factory";
+export type { GettingStartedFunctionsConsumer } from "./contracts/samples/GettingStartedFunctionsConsumer";
+export { GettingStartedFunctionsConsumer__factory } from "./factories/contracts/samples/GettingStartedFunctionsConsumer__factory";

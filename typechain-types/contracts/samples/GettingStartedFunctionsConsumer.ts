@@ -27,62 +27,38 @@ import type {
   PromiseOrValue,
 } from "../../common";
 
-export interface WastePriceProviderInterface extends utils.Interface {
+export interface GettingStartedFunctionsConsumerInterface
+  extends utils.Interface {
   functions: {
     "acceptOwnership()": FunctionFragment;
-    "donID()": FunctionFragment;
-    "gasLimit()": FunctionFragment;
-    "getWastePrice(uint256)": FunctionFragment;
+    "character()": FunctionFragment;
     "handleOracleFulfillment(bytes32,bytes,bytes)": FunctionFragment;
     "owner()": FunctionFragment;
-    "relayer()": FunctionFragment;
-    "requestWastePrice(uint256)": FunctionFragment;
-    "requestWasteType(bytes32)": FunctionFragment;
-    "router()": FunctionFragment;
     "s_lastError()": FunctionFragment;
     "s_lastRequestId()": FunctionFragment;
     "s_lastResponse()": FunctionFragment;
-    "setRelayer(address)": FunctionFragment;
-    "setWastePrice(uint256,uint256)": FunctionFragment;
-    "subscriptionId()": FunctionFragment;
-    "testFulfillRequest(bytes32,bytes,bytes)": FunctionFragment;
+    "sendRequest(uint64,string[])": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "wastePrices(uint256)": FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
       | "acceptOwnership"
-      | "donID"
-      | "gasLimit"
-      | "getWastePrice"
+      | "character"
       | "handleOracleFulfillment"
       | "owner"
-      | "relayer"
-      | "requestWastePrice"
-      | "requestWasteType"
-      | "router"
       | "s_lastError"
       | "s_lastRequestId"
       | "s_lastResponse"
-      | "setRelayer"
-      | "setWastePrice"
-      | "subscriptionId"
-      | "testFulfillRequest"
+      | "sendRequest"
       | "transferOwnership"
-      | "wastePrices"
   ): FunctionFragment;
 
   encodeFunctionData(
     functionFragment: "acceptOwnership",
     values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: "donID", values?: undefined): string;
-  encodeFunctionData(functionFragment: "gasLimit", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "getWastePrice",
-    values: [PromiseOrValue<BigNumberish>]
-  ): string;
+  encodeFunctionData(functionFragment: "character", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "handleOracleFulfillment",
     values: [
@@ -92,16 +68,6 @@ export interface WastePriceProviderInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
-  encodeFunctionData(functionFragment: "relayer", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "requestWastePrice",
-    values: [PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "requestWasteType",
-    values: [PromiseOrValue<BytesLike>]
-  ): string;
-  encodeFunctionData(functionFragment: "router", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "s_lastError",
     values?: undefined
@@ -115,59 +81,24 @@ export interface WastePriceProviderInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "setRelayer",
-    values: [PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setWastePrice",
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "subscriptionId",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "testFulfillRequest",
-    values: [
-      PromiseOrValue<BytesLike>,
-      PromiseOrValue<BytesLike>,
-      PromiseOrValue<BytesLike>
-    ]
+    functionFragment: "sendRequest",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>[]]
   ): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "wastePrices",
-    values: [PromiseOrValue<BigNumberish>]
   ): string;
 
   decodeFunctionResult(
     functionFragment: "acceptOwnership",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "donID", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "gasLimit", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "getWastePrice",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "character", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "handleOracleFulfillment",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "relayer", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "requestWastePrice",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "requestWasteType",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "router", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "s_lastError",
     data: BytesLike
@@ -180,40 +111,25 @@ export interface WastePriceProviderInterface extends utils.Interface {
     functionFragment: "s_lastResponse",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "setRelayer", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "setWastePrice",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "subscriptionId",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "testFulfillRequest",
+    functionFragment: "sendRequest",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "wastePrices",
-    data: BytesLike
-  ): Result;
 
   events: {
     "OwnershipTransferRequested(address,address)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
-    "PriceUpdated(uint256,uint256)": EventFragment;
     "RequestFulfilled(bytes32)": EventFragment;
     "RequestSent(bytes32)": EventFragment;
-    "Response(bytes32,uint256,bytes,bytes)": EventFragment;
+    "Response(bytes32,string,bytes,bytes)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferRequested"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "PriceUpdated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RequestFulfilled"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RequestSent"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Response"): EventFragment;
@@ -243,17 +159,6 @@ export type OwnershipTransferredEvent = TypedEvent<
 export type OwnershipTransferredEventFilter =
   TypedEventFilter<OwnershipTransferredEvent>;
 
-export interface PriceUpdatedEventObject {
-  wasteType: BigNumber;
-  price: BigNumber;
-}
-export type PriceUpdatedEvent = TypedEvent<
-  [BigNumber, BigNumber],
-  PriceUpdatedEventObject
->;
-
-export type PriceUpdatedEventFilter = TypedEventFilter<PriceUpdatedEvent>;
-
 export interface RequestFulfilledEventObject {
   id: string;
 }
@@ -274,23 +179,23 @@ export type RequestSentEventFilter = TypedEventFilter<RequestSentEvent>;
 
 export interface ResponseEventObject {
   requestId: string;
-  wasteType: BigNumber;
+  character: string;
   response: string;
   err: string;
 }
 export type ResponseEvent = TypedEvent<
-  [string, BigNumber, string, string],
+  [string, string, string, string],
   ResponseEventObject
 >;
 
 export type ResponseEventFilter = TypedEventFilter<ResponseEvent>;
 
-export interface WastePriceProvider extends BaseContract {
+export interface GettingStartedFunctionsConsumer extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: WastePriceProviderInterface;
+  interface: GettingStartedFunctionsConsumerInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -316,14 +221,7 @@ export interface WastePriceProvider extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    donID(overrides?: CallOverrides): Promise<[string]>;
-
-    gasLimit(overrides?: CallOverrides): Promise<[number]>;
-
-    getWastePrice(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    character(overrides?: CallOverrides): Promise<[string]>;
 
     handleOracleFulfillment(
       requestId: PromiseOrValue<BytesLike>,
@@ -334,43 +232,15 @@ export interface WastePriceProvider extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
-    relayer(overrides?: CallOverrides): Promise<[string]>;
-
-    requestWastePrice(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    requestWasteType(
-      arg0: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
-    router(overrides?: CallOverrides): Promise<[string]>;
-
     s_lastError(overrides?: CallOverrides): Promise<[string]>;
 
     s_lastRequestId(overrides?: CallOverrides): Promise<[string]>;
 
     s_lastResponse(overrides?: CallOverrides): Promise<[string]>;
 
-    setRelayer(
-      newRelayer: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    setWastePrice(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
-      price: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    subscriptionId(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    testFulfillRequest(
-      requestId: PromiseOrValue<BytesLike>,
-      response: PromiseOrValue<BytesLike>,
-      err: PromiseOrValue<BytesLike>,
+    sendRequest(
+      subscriptionId: PromiseOrValue<BigNumberish>,
+      args: PromiseOrValue<string>[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -378,25 +248,13 @@ export interface WastePriceProvider extends BaseContract {
       to: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
-
-    wastePrices(
-      arg0: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
   };
 
   acceptOwnership(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  donID(overrides?: CallOverrides): Promise<string>;
-
-  gasLimit(overrides?: CallOverrides): Promise<number>;
-
-  getWastePrice(
-    wasteTypeId: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
+  character(overrides?: CallOverrides): Promise<string>;
 
   handleOracleFulfillment(
     requestId: PromiseOrValue<BytesLike>,
@@ -407,43 +265,15 @@ export interface WastePriceProvider extends BaseContract {
 
   owner(overrides?: CallOverrides): Promise<string>;
 
-  relayer(overrides?: CallOverrides): Promise<string>;
-
-  requestWastePrice(
-    wasteTypeId: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  requestWasteType(
-    arg0: PromiseOrValue<BytesLike>,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  router(overrides?: CallOverrides): Promise<string>;
-
   s_lastError(overrides?: CallOverrides): Promise<string>;
 
   s_lastRequestId(overrides?: CallOverrides): Promise<string>;
 
   s_lastResponse(overrides?: CallOverrides): Promise<string>;
 
-  setRelayer(
-    newRelayer: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  setWastePrice(
-    wasteTypeId: PromiseOrValue<BigNumberish>,
-    price: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  subscriptionId(overrides?: CallOverrides): Promise<BigNumber>;
-
-  testFulfillRequest(
-    requestId: PromiseOrValue<BytesLike>,
-    response: PromiseOrValue<BytesLike>,
-    err: PromiseOrValue<BytesLike>,
+  sendRequest(
+    subscriptionId: PromiseOrValue<BigNumberish>,
+    args: PromiseOrValue<string>[],
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -452,22 +282,10 @@ export interface WastePriceProvider extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  wastePrices(
-    arg0: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
   callStatic: {
     acceptOwnership(overrides?: CallOverrides): Promise<void>;
 
-    donID(overrides?: CallOverrides): Promise<string>;
-
-    gasLimit(overrides?: CallOverrides): Promise<number>;
-
-    getWastePrice(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    character(overrides?: CallOverrides): Promise<string>;
 
     handleOracleFulfillment(
       requestId: PromiseOrValue<BytesLike>,
@@ -478,55 +296,22 @@ export interface WastePriceProvider extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<string>;
 
-    relayer(overrides?: CallOverrides): Promise<string>;
-
-    requestWastePrice(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    requestWasteType(
-      arg0: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    router(overrides?: CallOverrides): Promise<string>;
-
     s_lastError(overrides?: CallOverrides): Promise<string>;
 
     s_lastRequestId(overrides?: CallOverrides): Promise<string>;
 
     s_lastResponse(overrides?: CallOverrides): Promise<string>;
 
-    setRelayer(
-      newRelayer: PromiseOrValue<string>,
+    sendRequest(
+      subscriptionId: PromiseOrValue<BigNumberish>,
+      args: PromiseOrValue<string>[],
       overrides?: CallOverrides
-    ): Promise<void>;
-
-    setWastePrice(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
-      price: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    subscriptionId(overrides?: CallOverrides): Promise<BigNumber>;
-
-    testFulfillRequest(
-      requestId: PromiseOrValue<BytesLike>,
-      response: PromiseOrValue<BytesLike>,
-      err: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<string>;
 
     transferOwnership(
       to: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    wastePrices(
-      arg0: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
   };
 
   filters: {
@@ -548,12 +333,6 @@ export interface WastePriceProvider extends BaseContract {
       to?: PromiseOrValue<string> | null
     ): OwnershipTransferredEventFilter;
 
-    "PriceUpdated(uint256,uint256)"(
-      wasteType?: null,
-      price?: null
-    ): PriceUpdatedEventFilter;
-    PriceUpdated(wasteType?: null, price?: null): PriceUpdatedEventFilter;
-
     "RequestFulfilled(bytes32)"(
       id?: PromiseOrValue<BytesLike> | null
     ): RequestFulfilledEventFilter;
@@ -566,15 +345,15 @@ export interface WastePriceProvider extends BaseContract {
     ): RequestSentEventFilter;
     RequestSent(id?: PromiseOrValue<BytesLike> | null): RequestSentEventFilter;
 
-    "Response(bytes32,uint256,bytes,bytes)"(
+    "Response(bytes32,string,bytes,bytes)"(
       requestId?: PromiseOrValue<BytesLike> | null,
-      wasteType?: null,
+      character?: null,
       response?: null,
       err?: null
     ): ResponseEventFilter;
     Response(
       requestId?: PromiseOrValue<BytesLike> | null,
-      wasteType?: null,
+      character?: null,
       response?: null,
       err?: null
     ): ResponseEventFilter;
@@ -585,14 +364,7 @@ export interface WastePriceProvider extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    donID(overrides?: CallOverrides): Promise<BigNumber>;
-
-    gasLimit(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getWastePrice(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    character(overrides?: CallOverrides): Promise<BigNumber>;
 
     handleOracleFulfillment(
       requestId: PromiseOrValue<BytesLike>,
@@ -603,54 +375,21 @@ export interface WastePriceProvider extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
-    relayer(overrides?: CallOverrides): Promise<BigNumber>;
-
-    requestWastePrice(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    requestWasteType(
-      arg0: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    router(overrides?: CallOverrides): Promise<BigNumber>;
-
     s_lastError(overrides?: CallOverrides): Promise<BigNumber>;
 
     s_lastRequestId(overrides?: CallOverrides): Promise<BigNumber>;
 
     s_lastResponse(overrides?: CallOverrides): Promise<BigNumber>;
 
-    setRelayer(
-      newRelayer: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    setWastePrice(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
-      price: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    subscriptionId(overrides?: CallOverrides): Promise<BigNumber>;
-
-    testFulfillRequest(
-      requestId: PromiseOrValue<BytesLike>,
-      response: PromiseOrValue<BytesLike>,
-      err: PromiseOrValue<BytesLike>,
+    sendRequest(
+      subscriptionId: PromiseOrValue<BigNumberish>,
+      args: PromiseOrValue<string>[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     transferOwnership(
       to: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    wastePrices(
-      arg0: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
     ): Promise<BigNumber>;
   };
 
@@ -659,14 +398,7 @@ export interface WastePriceProvider extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    donID(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    gasLimit(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    getWastePrice(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    character(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     handleOracleFulfillment(
       requestId: PromiseOrValue<BytesLike>,
@@ -677,54 +409,21 @@ export interface WastePriceProvider extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    relayer(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    requestWastePrice(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    requestWasteType(
-      arg0: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    router(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     s_lastError(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     s_lastRequestId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     s_lastResponse(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    setRelayer(
-      newRelayer: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setWastePrice(
-      wasteTypeId: PromiseOrValue<BigNumberish>,
-      price: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    subscriptionId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    testFulfillRequest(
-      requestId: PromiseOrValue<BytesLike>,
-      response: PromiseOrValue<BytesLike>,
-      err: PromiseOrValue<BytesLike>,
+    sendRequest(
+      subscriptionId: PromiseOrValue<BigNumberish>,
+      args: PromiseOrValue<string>[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     transferOwnership(
       to: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    wastePrices(
-      arg0: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };
 }
