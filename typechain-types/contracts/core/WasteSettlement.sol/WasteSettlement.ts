@@ -30,27 +30,39 @@ import type {
 export declare namespace WasteSettlement {
   export type WasteTradeStruct = {
     user: PromiseOrValue<string>;
+    approver: PromiseOrValue<string>;
     wasteTypeIds: PromiseOrValue<BigNumberish>[];
     amounts: PromiseOrValue<BigNumberish>[];
     approved: PromiseOrValue<boolean>;
     rejected: PromiseOrValue<boolean>;
     settled: PromiseOrValue<boolean>;
+    totalTokenReceived: PromiseOrValue<BigNumberish>;
+    totalUSDCReceived: PromiseOrValue<BigNumberish>;
+    totalEmissionAmount: PromiseOrValue<BigNumberish>;
   };
 
   export type WasteTradeStructOutput = [
+    string,
     string,
     BigNumber[],
     BigNumber[],
     boolean,
     boolean,
-    boolean
+    boolean,
+    BigNumber,
+    BigNumber,
+    BigNumber
   ] & {
     user: string;
+    approver: string;
     wasteTypeIds: BigNumber[];
     amounts: BigNumber[];
     approved: boolean;
     rejected: boolean;
     settled: boolean;
+    totalTokenReceived: BigNumber;
+    totalUSDCReceived: BigNumber;
+    totalEmissionAmount: BigNumber;
   };
 }
 
@@ -64,7 +76,7 @@ export interface WasteSettlementInterface extends utils.Interface {
     "rejectTrade(uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "socialNodeRegistry()": FunctionFragment;
-    "submitWasteTrade(uint256[],uint256[])": FunctionFragment;
+    "submitWasteTrade(address,uint256[],uint256[])": FunctionFragment;
     "tradeCounter()": FunctionFragment;
     "trades(uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
@@ -131,7 +143,11 @@ export interface WasteSettlementInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "submitWasteTrade",
-    values: [PromiseOrValue<BigNumberish>[], PromiseOrValue<BigNumberish>[]]
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>[],
+      PromiseOrValue<BigNumberish>[]
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "tradeCounter",
@@ -367,6 +383,7 @@ export interface WasteSettlement extends BaseContract {
     socialNodeRegistry(overrides?: CallOverrides): Promise<[string]>;
 
     submitWasteTrade(
+      userAddress: PromiseOrValue<string>,
       wasteTypeIds: PromiseOrValue<BigNumberish>[],
       amounts: PromiseOrValue<BigNumberish>[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -378,11 +395,24 @@ export interface WasteSettlement extends BaseContract {
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<
-      [string, boolean, boolean, boolean] & {
+      [
+        string,
+        string,
+        boolean,
+        boolean,
+        boolean,
+        BigNumber,
+        BigNumber,
+        BigNumber
+      ] & {
         user: string;
+        approver: string;
         approved: boolean;
         rejected: boolean;
         settled: boolean;
+        totalTokenReceived: BigNumber;
+        totalUSDCReceived: BigNumber;
+        totalEmissionAmount: BigNumber;
       }
     >;
 
@@ -446,6 +476,7 @@ export interface WasteSettlement extends BaseContract {
   socialNodeRegistry(overrides?: CallOverrides): Promise<string>;
 
   submitWasteTrade(
+    userAddress: PromiseOrValue<string>,
     wasteTypeIds: PromiseOrValue<BigNumberish>[],
     amounts: PromiseOrValue<BigNumberish>[],
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -457,11 +488,24 @@ export interface WasteSettlement extends BaseContract {
     arg0: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<
-    [string, boolean, boolean, boolean] & {
+    [
+      string,
+      string,
+      boolean,
+      boolean,
+      boolean,
+      BigNumber,
+      BigNumber,
+      BigNumber
+    ] & {
       user: string;
+      approver: string;
       approved: boolean;
       rejected: boolean;
       settled: boolean;
+      totalTokenReceived: BigNumber;
+      totalUSDCReceived: BigNumber;
+      totalEmissionAmount: BigNumber;
     }
   >;
 
@@ -523,6 +567,7 @@ export interface WasteSettlement extends BaseContract {
     socialNodeRegistry(overrides?: CallOverrides): Promise<string>;
 
     submitWasteTrade(
+      userAddress: PromiseOrValue<string>,
       wasteTypeIds: PromiseOrValue<BigNumberish>[],
       amounts: PromiseOrValue<BigNumberish>[],
       overrides?: CallOverrides
@@ -534,11 +579,24 @@ export interface WasteSettlement extends BaseContract {
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<
-      [string, boolean, boolean, boolean] & {
+      [
+        string,
+        string,
+        boolean,
+        boolean,
+        boolean,
+        BigNumber,
+        BigNumber,
+        BigNumber
+      ] & {
         user: string;
+        approver: string;
         approved: boolean;
         rejected: boolean;
         settled: boolean;
+        totalTokenReceived: BigNumber;
+        totalUSDCReceived: BigNumber;
+        totalEmissionAmount: BigNumber;
       }
     >;
 
@@ -652,6 +710,7 @@ export interface WasteSettlement extends BaseContract {
     socialNodeRegistry(overrides?: CallOverrides): Promise<BigNumber>;
 
     submitWasteTrade(
+      userAddress: PromiseOrValue<string>,
       wasteTypeIds: PromiseOrValue<BigNumberish>[],
       amounts: PromiseOrValue<BigNumberish>[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -725,6 +784,7 @@ export interface WasteSettlement extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     submitWasteTrade(
+      userAddress: PromiseOrValue<string>,
       wasteTypeIds: PromiseOrValue<BigNumberish>[],
       amounts: PromiseOrValue<BigNumberish>[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }

@@ -23,11 +23,16 @@ interface ISocialNodeRegistry {
 contract WasteSettlement is Ownable {
     struct WasteTrade {
         address user;
+        address approver;
         uint256[] wasteTypeIds;
         uint256[] amounts; // Amounts in grams
         bool approved;
         bool rejected;
         bool settled;
+
+        uint256 totalTokenReceived;
+        uint256 totalUSDCReceived;
+        uint256 totalEmissionAmount;
     }
 
     // Address of the USDC token contract
@@ -70,14 +75,18 @@ contract WasteSettlement is Ownable {
     }
 
     // Submit a trade for waste processing
-    function submitWasteTrade(uint256[] calldata wasteTypeIds, uint256[] calldata amounts) external {
+    function submitWasteTrade(address userAddress, uint256[] calldata wasteTypeIds, uint256[] calldata amounts) external {
         require(wasteTypeIds.length == amounts.length, "Mismatched inputs");
         require(wasteTypeIds.length > 0, "No waste submitted");
 
         trades[tradeCounter] = WasteTrade({
-            user: msg.sender,
+            user: userAddress,
+            approver: address(0),
             wasteTypeIds: wasteTypeIds,
             amounts: amounts,
+            totalTokenReceived: 0,
+            totalEmissionAmount: 0,
+            totalUSDCReceived: 0,
             approved: false,
             rejected: false,
             settled: false
@@ -94,6 +103,7 @@ contract WasteSettlement is Ownable {
         require(!trade.approved && !trade.rejected, "Trade already processed");
 
         trade.approved = true;
+        trade.approver = msg.sender;
         emit TradeApproved(tradeId, msg.sender);
 
         // Calculate and settle the trade
@@ -118,7 +128,7 @@ contract WasteSettlement is Ownable {
 
         uint256 totalWasteTokenAmount = 0;
         uint256 totalUSDCAmount = 0;
-
+        uint256 totalEmissionAmount = 0;
         for (uint256 i = 0; i < trade.wasteTypeIds.length; i++) {
             uint256 wasteTypeId = trade.wasteTypeIds[i];
             uint256 amount = trade.amounts[i]; // in grams
@@ -130,7 +140,12 @@ contract WasteSettlement is Ownable {
             // Calculate the total WasteToken and USDC amounts
             totalWasteTokenAmount += (amount * carbonEmissionRate * 1e18) / 1e4; // Adjust for decimals
             totalUSDCAmount += (amount * price); // Adjust for decimals
+            totalEmissionAmount += carbonEmissionRate;
         }
+
+        trade.totalEmissionAmount = totalEmissionAmount;
+        trade.totalUSDCReceived = totalUSDCAmount;
+        trade.totalTokenReceived = totalWasteTokenAmount;
 
         // Mint WasteToken and transfer USDC to user
         wasteToken.mint(trade.user, totalWasteTokenAmount);
