@@ -256,7 +256,7 @@ export interface WasteSettlementInterface extends utils.Interface {
     "OwnershipTransferred(address,address)": EventFragment;
     "TradeApproved(uint256,address)": EventFragment;
     "TradeRejected(uint256,address)": EventFragment;
-    "TradeSettled(uint256,address,uint256,uint256)": EventFragment;
+    "TradeSettled(uint256,address,uint256,uint256,uint256)": EventFragment;
     "TradeSubmitted(uint256,address)": EventFragment;
   };
 
@@ -306,9 +306,10 @@ export interface TradeSettledEventObject {
   user: string;
   wasteTokenAmount: BigNumber;
   usdcAmount: BigNumber;
+  totalEmission: BigNumber;
 }
 export type TradeSettledEvent = TypedEvent<
-  [BigNumber, string, BigNumber, BigNumber],
+  [BigNumber, string, BigNumber, BigNumber, BigNumber],
   TradeSettledEventObject
 >;
 
@@ -657,17 +658,19 @@ export interface WasteSettlement extends BaseContract {
       socialNode?: PromiseOrValue<string> | null
     ): TradeRejectedEventFilter;
 
-    "TradeSettled(uint256,address,uint256,uint256)"(
+    "TradeSettled(uint256,address,uint256,uint256,uint256)"(
       tradeId?: null,
       user?: PromiseOrValue<string> | null,
       wasteTokenAmount?: null,
-      usdcAmount?: null
+      usdcAmount?: null,
+      totalEmission?: null
     ): TradeSettledEventFilter;
     TradeSettled(
       tradeId?: null,
       user?: PromiseOrValue<string> | null,
       wasteTokenAmount?: null,
-      usdcAmount?: null
+      usdcAmount?: null,
+      totalEmission?: null
     ): TradeSettledEventFilter;
 
     "TradeSubmitted(uint256,address)"(

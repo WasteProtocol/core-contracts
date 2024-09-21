@@ -82,14 +82,14 @@ await socialNodeRegistry.addSocialNode(0x00)
 ```
 let USDC = await ethers.getContractFactory("USDC")
 let usdc = await USDC.attach("0xaBB8eF316584b0f4fFc2aEC5f5242992DfE81c3A")
-await usdc.mint('0xcB59eA9D4abEbC68B8f88813Ac1dF703953f6041', '100000000000000000000000000000')
+await usdc.mint('0xdCE2395d97A307c6179f7ee8A7b843c768BE4221', '100000000000000000000000000000')
 ```
 
 ### add settlement as a minter
 ```
 let WasteToken = await ethers.getContractFactory("WasteToken")
 let token = await WasteToken.attach("0x398B8fFC1bB1dFe4594B1860589e18Fb040AbC88")
-await token.addMinter("0xcB59eA9D4abEbC68B8f88813Ac1dF703953f6041")
+await token.addMinter("0xdCE2395d97A307c6179f7ee8A7b843c768BE4221")
 ```
 
 ## step to setting up 
@@ -112,6 +112,6 @@ WastePriceProvider :
 | Sepolia | SocialNodeRegistry | 0x56287933c2e7aBf68f2C0Dd43f807De4C5DA228f |
 | Sepolia | WasteDataProvider  | 0x75f8Cf9659A65AabE41Ade64BB9F1Fb123a4185b |
 | Sepolia | WastePriceProvider | 0x6e0E443A26b7599EEF9af5770e407381eDDFD6e1 |
-| Sepolia | WasteSettlement    | 0xcB59eA9D4abEbC68B8f88813Ac1dF703953f6041 |
+| Sepolia | WasteSettlement    | 0xdCE2395d97A307c6179f7ee8A7b843c768BE4221 |
 
 

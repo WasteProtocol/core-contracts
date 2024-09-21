@@ -58,7 +58,7 @@ contract WasteSettlement is Ownable {
     event TradeSubmitted(uint256 tradeId, address indexed user);
     event TradeApproved(uint256 tradeId, address indexed socialNode);
     event TradeRejected(uint256 tradeId, address indexed socialNode);
-    event TradeSettled(uint256 tradeId, address indexed user, uint256 wasteTokenAmount, uint256 usdcAmount);
+    event TradeSettled(uint256 tradeId, address indexed user, uint256 wasteTokenAmount, uint256 usdcAmount, uint256 totalEmission);
 
     constructor(
         address _usdc,
@@ -152,7 +152,7 @@ contract WasteSettlement is Ownable {
         require(usdc.transfer(trade.user, totalUSDCAmount), "USDC transfer failed");
 
         trade.settled = true;
-        emit TradeSettled(tradeId, trade.user, totalWasteTokenAmount, totalUSDCAmount);
+        emit TradeSettled(tradeId, trade.user, totalWasteTokenAmount, totalUSDCAmount, totalEmissionAmount);
     }
 
     // Utility function to view pending trades
