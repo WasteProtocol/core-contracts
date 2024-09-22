@@ -1,4 +1,9 @@
 # Smart contract boiler plate
+
+# Waste Protocol DEMI=O
+#DEMO (https://waste-protocol.vercel.app/)
+#DEMO: (https://waste-protocol-pro.vercel.app/)
+
 This project is a smart contract development boiler plate develop by a3r0nz.
  version 1.1.0
 
