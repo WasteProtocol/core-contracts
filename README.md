@@ -52,9 +52,6 @@ Scripts
 ```
 let WasteDataProvider = await ethers.getContractFactory("WasteDataProvider")
 let dataProvider = await WasteDataProvider.attach("0x75f8Cf9659A65AabE41Ade64BB9F1Fb123a4185b")
-let emissionRate = 91234 // 9.1234
-await dataProvider.addOrUpdateCategory(1,'categoryname', emissionRate) // catid
-await dataProvider.addWasteTypeToCategory(1, 1, 'type name') // catid, typeid
 
 await dataProvider.addOrUpdateCategory('679fae79-eaca-4460-b612-7f1b1832f3be','plastic', 10300) 
 await dataProvider.addOrUpdateCategory('f731c55b-7d66-4e37-8194-c784b22cfe95','paper', 35400) 
@@ -75,7 +72,7 @@ await priceProvider.requestWasteType(1)
 ```
 let SocialNodeRegistry = await ethers.getContractFactory("SocialNodeRegistry")
 socialNodeRegistry = await SocialNodeRegistry.attach("0x56287933c2e7aBf68f2C0Dd43f807De4C5DA228f")
-await socialNodeRegistry.addSocialNode(0x00)
+await socialNodeRegistry.addSocialNode("0x31c49142060c8AC5921163a2e554AbB2C35Df8A0")
 ```
 
 ### mint usdc 
@@ -118,9 +115,9 @@ await token.addMinter("0xdCE2395d97A307c6179f7ee8A7b843c768BE4221")
 
 | Chain   | Name               | Address                                    |
 |---------|--------------------|--------------------------------------------|
-| Sepolia | WasteToken         | 0xa84aC71C1F6C5B533dA717f4eb88596bB2871aBf |
-| Sepolia | USDC               | 0x33533a67C62AcF8595CfDFC261F90b29bB617c39 |
-| Sepolia | SocialNodeRegistry |  |
-| Sepolia | WasteDataProvider  |  |
-| Sepolia | WastePriceProvider |  |
-| Sepolia | WasteSettlement    |  |
+| linea   | WasteToken         | 0xa84aC71C1F6C5B533dA717f4eb88596bB2871aBf |
+| linea | USDC               | 0x33533a67C62AcF8595CfDFC261F90b29bB617c39 |
+| linea | SocialNodeRegistry |  |
+| linea | WasteDataProvider  |  |
+| linea | WastePriceProvider |  |
+| linea | WasteSettlement    |  |
