@@ -1,6 +1,22 @@
-# Smart contract boiler plate
-This project is a smart contract development boiler plate develop by a3r0nz.
- version 1.1.0
+## Sepolia
+
+| Chain   | Name               | Address                                    |
+|---------|--------------------|--------------------------------------------|
+| Sepolia | WasteToken         | 0x398B8fFC1bB1dFe4594B1860589e18Fb040AbC88 |
+| Sepolia | USDC               | 0xaBB8eF316584b0f4fFc2aEC5f5242992DfE81c3A |
+| Sepolia | SocialNodeRegistry | 0x56287933c2e7aBf68f2C0Dd43f807De4C5DA228f |
+| Sepolia | WasteDataProvider  | 0x75f8Cf9659A65AabE41Ade64BB9F1Fb123a4185b |
+| Sepolia | WastePriceProvider | 0x6e0E443A26b7599EEF9af5770e407381eDDFD6e1 |
+| Sepolia | WasteSettlement    | 0xdCE2395d97A307c6179f7ee8A7b843c768BE4221 |
+
+
+## Linea sepolia
+
+| Chain   | Name               | Address                                    |
+|---------|--------------------|--------------------------------------------|
+| linea   | WasteToken         | 0xa84aC71C1F6C5B533dA717f4eb88596bB2871aBf |
+| linea | USDC               | 0x33533a67C62AcF8595CfDFC261F90b29bB617c39 |
+
 
 ## Documenting
 To generate documents run this command
@@ -99,25 +115,3 @@ await token.addMinter("0xdCE2395d97A307c6179f7ee8A7b843c768BE4221")
 7. add settlement as a minter of waste token 
 8. test call
 
-## Sepolia
-
-| Chain   | Name               | Address                                    |
-|---------|--------------------|--------------------------------------------|
-| Sepolia | WasteToken         | 0x398B8fFC1bB1dFe4594B1860589e18Fb040AbC88 |
-| Sepolia | USDC               | 0xaBB8eF316584b0f4fFc2aEC5f5242992DfE81c3A |
-| Sepolia | SocialNodeRegistry | 0x56287933c2e7aBf68f2C0Dd43f807De4C5DA228f |
-| Sepolia | WasteDataProvider  | 0x75f8Cf9659A65AabE41Ade64BB9F1Fb123a4185b |
-| Sepolia | WastePriceProvider | 0x6e0E443A26b7599EEF9af5770e407381eDDFD6e1 |
-| Sepolia | WasteSettlement    | 0xdCE2395d97A307c6179f7ee8A7b843c768BE4221 |
-
-
-## Linea sepolia
-
-| Chain   | Name               | Address                                    |
-|---------|--------------------|--------------------------------------------|
-| linea   | WasteToken         | 0xa84aC71C1F6C5B533dA717f4eb88596bB2871aBf |
-| linea | USDC               | 0x33533a67C62AcF8595CfDFC261F90b29bB617c39 |
-| linea | SocialNodeRegistry |  |
-| linea | WasteDataProvider  |  |
-| linea | WastePriceProvider |  |
-| linea | WasteSettlement    |  |
